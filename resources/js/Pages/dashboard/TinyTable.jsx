@@ -3,7 +3,7 @@ function TinyTable({ data, title, link }) {
     return (
         <div className="tiny-table">
             <div className="head">
-                <h5>{title}</h5> <Link href={route(link)}>View All</Link>
+                <h2>{title}</h2> <Link href={route(link)}>View All</Link>
             </div>
             <div className="body">
                 <div>

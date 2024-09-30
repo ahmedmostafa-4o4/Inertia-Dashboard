@@ -4,7 +4,7 @@ import axios from "axios";
 import Main from "../Main";
 import { Head } from "@inertiajs/react";
 
-function Users() {
+function Users({ auth }) {
     const [products, setProducts] = useState([]);
 
     const fetchProducts = async () => {
@@ -18,7 +18,6 @@ function Users() {
             { Header: "ID", accessor: "id" },
             { Header: "Title", accessor: "title" },
             { Header: "Price", accessor: "price" },
-            { Header: "Description", accessor: "description" },
             { Header: "Category", accessor: "category" },
             { Header: "Image", accessor: "image" },
         ],
@@ -30,7 +29,7 @@ function Users() {
     }, []);
 
     return (
-        <Main>
+        <Main auth={auth}>
             <Head title="Users" />
             {products.length && (
                 <Table data={products} columns={columns} title={"Users"} />

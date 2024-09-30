@@ -1,10 +1,16 @@
-import { faBars, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import {
+    faBars,
+    faBell,
+    faMoon,
+    faSun,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Overlay from "./Overlay";
 import { useEffect, useState } from "react";
 import UserDropDown from "./UserDropDown";
+import { Link } from "@inertiajs/react";
 
-export default function Nav({ header }) {
+export default function Nav({ header, auth }) {
     const [isOpen, setIsOpen] = useState(false);
     const [mode, setMode] = useState("dark");
     const changeMode = () => {
@@ -88,6 +94,9 @@ export default function Nav({ header }) {
                     <h1>Dashboard | {header}</h1>
                 </div>
                 <div className="actions">
+                    <Link>
+                        <FontAwesomeIcon icon={faBell} />
+                    </Link>
                     <button
                         className="light-dark-mode"
                         onClick={() => changeMode()}
@@ -99,7 +108,7 @@ export default function Nav({ header }) {
                         )}
                     </button>
 
-                    <UserDropDown />
+                    <UserDropDown auth={auth} />
                 </div>
             </div>
         </>

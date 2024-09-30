@@ -9,7 +9,7 @@ import PieChartWithCenterLabel from "./Charts/PieChart";
 import Main from "../Main";
 import { Head } from "@inertiajs/react";
 
-function Home() {
+function Home({ auth, latitude, longitude }) {
     const data = React.useMemo(
         () => [
             { name: "John", age: 28, status: "Active" },
@@ -42,7 +42,7 @@ function Home() {
     );
 
     return (
-        <Main header={"Home"}>
+        <Main header={"Home"} auth={auth}>
             <Head title="Home" />
             <div className="dashboard-home">
                 <div className="totals">
@@ -95,7 +95,7 @@ function Home() {
                     <LineChart />
                     <PieChartWithCenterLabel />
                 </div>
-                <ActiveUsersMap />
+                <ActiveUsersMap latitude={latitude} longitude={longitude} />
                 <div className="data">
                     <div>
                         <TinyTable title={"Recent Users"} link={"users"} />
