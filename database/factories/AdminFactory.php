@@ -18,15 +18,18 @@ class AdminFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => "Ahmed Mostafa",
-            'email' => "admin@gmail.com",
+
+            'name' => fake()->name(),
+            'email' => fake()->email(),
             'password' => Hash::make("Lofylofy56"),
-            'phone_number' => "01025250321",
+            'phone_number' => fake()->phoneNumber(),
             'role' => "owner",
             'created_at' => now(),
             'updated_at' => now(),
-            'created_by' => "Ahmed Mostafa",
-            'updated_by' => "Ahmed Mostafa",
+            'created_by' => fake()->name(),
+            'updated_by' => fake()->name(),
+
+
         ];
     }
 }

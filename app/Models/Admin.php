@@ -51,4 +51,8 @@ class Admin extends Authenticatable
     {
         return $this->belongsTo(Admin::class, 'created_by');
     }
+    public function updator()
+    {
+        return $this->belongsTo(Admin::class, 'updated_by');
+    }
 }

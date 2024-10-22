@@ -2,11 +2,8 @@ import {
     faArrowAltCircleLeft,
     faArrowAltCircleRight,
     faArrowDown,
-    faArrowLeft,
-    faArrowRight,
     faArrowUp,
     faBell,
-    faRightFromBracket,
     faSort,
     faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +12,8 @@ import React, { useState } from "react";
 import { Link, router } from "@inertiajs/react";
 import { useTable, useSortBy, usePagination, useFilters } from "react-table";
 import Checkbox from "@/Components/Checkbox";
+import Swal from "sweetalert2";
+import UserImage from "@/Components/UserImage";
 
 // Default filter component
 function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
@@ -30,6 +29,7 @@ function DefaultColumnFilter({ column: { filterValue, setFilter } }) {
 }
 
 const Table = ({
+    auth,
     columns,
     data,
     title,
@@ -37,6 +37,14 @@ const Table = ({
     search = true,
     sort = true,
     link = null,
+    checkBox = false,
+    usersStatus = [],
+    actions = {
+        delete: () => {},
+        deleteAll: () => {},
+        edit: () => {},
+        notification: () => {},
+    },
 }) => {
     const {
         getTableProps,
@@ -61,6 +69,26 @@ const Table = ({
         useSortBy, // Hook for sorting
         usePagination // Hook for pagination
     );
+
+    const alertPopup = (action = () => {}) => {
+        Swal.fire({
+            title: "Are You Sure?",
+            showCancelButton: true,
+            confirmButtonText: "Sure",
+            showClass: {
+                popup: "animate__animated animate__backInDown", // animation on show
+            },
+            hideClass: {
+                popup: "animate__animated animate__backOutDown", // animation on hide
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                action();
+                setSelectedRows([]);
+                // You can handle the textarea value here
+            }
+        });
+    };
 
     // State to store the IDs of selected rows
     const [selectedRows, setSelectedRows] = useState([]);
@@ -88,7 +116,6 @@ const Table = ({
         }
     };
 
-    console.log(data[0].id);
     return (
         <>
             <div className="table-container overflow-auto">
@@ -96,16 +123,38 @@ const Table = ({
                     <h2>{title}</h2>
                     {selectedRows.length ? (
                         <div className="flex justify-center gap-1 ">
-                            <button className="secondary">
-                                <FontAwesomeIcon icon={faBell} />
-                                Send Notification
-                            </button>
+                            {actions.notification && (
+                                <button
+                                    className="secondary"
+                                    onClick={() => {
+                                        actions.notification(
+                                            selectedRows.map((row) => row.id)
+                                        );
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faBell} />
+                                    Send Notification
+                                </button>
+                            )}
 
-                            <button className="danger">
-                                {" "}
-                                <FontAwesomeIcon icon={faTrashCan} />
-                                Delete
-                            </button>
+                            {actions.deleteAll && (
+                                <button
+                                    onClick={() => {
+                                        alertPopup(() =>
+                                            actions.deleteAll(
+                                                selectedRows.map(
+                                                    (row) => row.id
+                                                )
+                                            )
+                                        );
+                                    }}
+                                    className="danger"
+                                >
+                                    {" "}
+                                    <FontAwesomeIcon icon={faTrashCan} />
+                                    Delete
+                                </button>
+                            )}
                         </div>
                     ) : null}
                     {link && <Link href={route(link)}>View All</Link>}
@@ -121,20 +170,24 @@ const Table = ({
                                 {...headerGroup.getHeaderGroupProps()}
                                 className="text-nowrap"
                             >
-                                <th className="px-3 py-3 text-right align-bottom ">
-                                    <Checkbox
-                                        onChange={(e) => {
-                                            handleSelectAllChange(
-                                                e.target.checked
-                                            );
-                                        }}
-                                        // Check if all rows are selected
-                                        checked={
-                                            selectedRows.length === data.length
-                                        }
-                                        className="table-header"
-                                    />
-                                </th>
+                                {checkBox && (
+                                    <th className="px-3 py-3 text-right align-bottom ">
+                                        <Checkbox
+                                            onChange={(e) => {
+                                                handleSelectAllChange(
+                                                    e.target.checked
+                                                );
+                                            }}
+                                            // Check if all rows are selected
+                                            checked={
+                                                selectedRows.length ===
+                                                data.length
+                                            }
+                                            className="table-header"
+                                        />
+                                    </th>
+                                )}
+
                                 {headerGroup.headers.map((column) => (
                                     <th className="px-3 py-3 text-right ">
                                         {search && (
@@ -182,12 +235,14 @@ const Table = ({
                                         </p>
                                     </th>
                                 ))}
-                                <th
-                                    className="px-3 py-3 text-center align-bottom "
-                                    colSpan={2}
-                                >
-                                    Actions
-                                </th>
+                                {actions && (
+                                    <th
+                                        className="px-3 py-3 text-center align-bottom "
+                                        colSpan={2}
+                                    >
+                                        Actions
+                                    </th>
+                                )}
                             </tr>
                         ))}
                     </thead>
@@ -199,24 +254,24 @@ const Table = ({
                                     {...row.getRowProps()}
                                     className=" border-b "
                                 >
-                                    <th className="px-3 py-2 text-gray-100 text-nowrap ">
-                                        <Checkbox
-                                            onChange={() => {
-                                                handleCheckboxChange(
-                                                    row.original
-                                                );
-                                                console.log(
-                                                    row.cells[1].column.id
-                                                );
-                                            }}
-                                            // Check if this row is selected
-                                            checked={selectedRows.some(
-                                                (selectedRow) =>
-                                                    selectedRow.id ===
-                                                    row.original.id
-                                            )}
-                                        />
-                                    </th>
+                                    {checkBox && (
+                                        <th className="px-3 py-2 text-gray-100 text-nowrap ">
+                                            <Checkbox
+                                                onChange={() => {
+                                                    handleCheckboxChange(
+                                                        row.original
+                                                    );
+                                                }}
+                                                // Check if this row is selected
+                                                checked={selectedRows.some(
+                                                    (selectedRow) =>
+                                                        selectedRow.id ===
+                                                        row.original.id
+                                                )}
+                                            />
+                                        </th>
+                                    )}
+
                                     {row.cells.map((cell) =>
                                         cell.column.id === "name" ? (
                                             <td
@@ -233,6 +288,15 @@ const Table = ({
                                             >
                                                 {cell.render("Cell")}
                                             </td>
+                                        ) : cell.column.id === "image_path" ? (
+                                            <td
+                                                {...cell.getCellProps()}
+                                                className="px-3 py-2 text-gray-300 text-nowrap flex justify-center items-center"
+                                            >
+                                                <UserImage
+                                                    src={row.values.image_path}
+                                                />
+                                            </td>
                                         ) : (
                                             <td
                                                 {...cell.getCellProps()}
@@ -242,16 +306,35 @@ const Table = ({
                                             </td>
                                         )
                                     )}
-                                    <td className="px-3 py-2 text-gray-100 text-nowrap text-center ">
-                                        <button className="primary">
-                                            Edit
-                                        </button>
-                                    </td>
-                                    <td className="px-3 py-2 text-gray-100 text-nowrap text-center ">
-                                        <button className="danger">
-                                            Delete
-                                        </button>
-                                    </td>
+                                    {actions && (
+                                        <>
+                                            {" "}
+                                            <td className="px-3 py-2 text-gray-100 text-nowrap text-center ">
+                                                <Link
+                                                    href={actions.edit(
+                                                        row.values.id
+                                                    )}
+                                                    className="primary"
+                                                >
+                                                    Edit
+                                                </Link>
+                                            </td>
+                                            <td className="px-3 py-2 text-gray-100 text-nowrap text-center ">
+                                                <button
+                                                    onClick={() => {
+                                                        alertPopup(() =>
+                                                            actions.delete(
+                                                                row.values.id
+                                                            )
+                                                        );
+                                                    }}
+                                                    className="danger"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </>
+                                    )}
                                 </tr>
                             );
                         })}

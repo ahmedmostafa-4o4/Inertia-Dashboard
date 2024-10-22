@@ -2,7 +2,7 @@ import InputError from "@/Components/InputError";
 import Main from "@/Pages/Main";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { useRef } from "react";
 
 function AddAdmin({ auth }) {
@@ -17,17 +17,17 @@ function AddAdmin({ auth }) {
     });
 
     const imageRef = useRef();
+    const formImage = useRef();
     const handleForm = (e) => {
         e.preventDefault();
-        console.log(data);
         post(route("admins.store"));
     };
 
     return (
-        <Main header="Add Admin" auth={auth}>
+        <Main header="Admins" auth={auth}>
             <div className="dashboard-form">
-                <h1>New Admin</h1>
-                <form onSubmit={handleForm}>
+                <h1>Add Admin</h1>
+                <form onSubmit={handleForm} className="input-style">
                     <input
                         type="text"
                         name="name"
@@ -63,9 +63,18 @@ function AddAdmin({ auth }) {
                         id="image"
                         ref={imageRef}
                         hidden
-                        onChange={(e) =>
-                            setData("image_path", e.target.files[0])
-                        }
+                        onChange={(e) => {
+                            setData("image_path", e.target.files[0]);
+                            formImage.current.src = URL.createObjectURL(
+                                e.target.files[0]
+                            );
+                        }}
+                    />
+                    <img
+                        id="form-image"
+                        src="/images/default-user.jpg"
+                        alt=""
+                        ref={formImage}
                     />
                     <button
                         onClick={(e) => {
@@ -121,7 +130,18 @@ function AddAdmin({ auth }) {
                     </select>
                     <InputError message={errors.role} className="error" />
 
-                    <button>Add</button>
+                    <div className="flex justify-center align-middle gap-2">
+                        <button className="flex-1 primary">Add</button>
+                        <button
+                            className="flex-1 danger"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                router.get(route("admins.index"));
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             </div>
         </Main>

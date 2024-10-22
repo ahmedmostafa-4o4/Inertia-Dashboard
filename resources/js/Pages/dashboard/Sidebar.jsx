@@ -25,10 +25,8 @@ function Sidebar({ auth }) {
         }
     };
 
-    const onChange = () => {};
-
     return (
-        <div className="dashboard-sidebar show">
+        <div className="dashboard-sidebar show ">
             <div className="logo">
                 {/* <Link to={"/"}>
                     {" "}
@@ -38,39 +36,44 @@ function Sidebar({ auth }) {
             <div className="profile-component">
                 <img src={`/storage/${auth.user.image_path}`} alt="" />
                 <p>{auth.user.name}</p>
-                <Link href={route("profile", 3)}>
+                <span className="text-slate-400 font-thin text-xs">
+                    {auth.user.email}
+                </span>
+                <span className="text-slate-400 font-thin text-xs">
+                    {auth.user.role}
+                </span>
+                <Link href={route("admin.profile")}>
                     View profile <FontAwesomeIcon icon={faAngleRight} />
                 </Link>
             </div>
             <div className="links">
                 <div className="menu-holder">
                     <button className="menu-item home-btn">
-                        <Link href={route("admin")}>Home</Link>
+                        <Link href={route("home")}>Home</Link>
                     </button>
                 </div>
-                <div className="menu-holder">
-                    <button
-                        className="menu-item"
-                        onClick={(btn) => handleMenu(btn.currentTarget)}
-                    >
-                        Admins
-                        <FontAwesomeIcon icon={faAngleRight} />
-                    </button>
-                    <div className="submenu">
-                        <Link href={route("admins.index")}>
-                            <FontAwesomeIcon icon={faUser} />
-                            <p>Admins List</p>
-                        </Link>
-                        <Link href={route("admins.create")}>
-                            <FontAwesomeIcon icon={faUser} />
-                            <p>New Admin</p>
-                        </Link>
-                        <Link to={"notifications"}>
-                            <FontAwesomeIcon icon={faBell} />
-                            <p>Send Notifications</p>
-                        </Link>
+                {auth.user.role === "owner" ? (
+                    <div className="menu-holder">
+                        <button
+                            className="menu-item"
+                            onClick={(btn) => handleMenu(btn.currentTarget)}
+                        >
+                            Admins
+                            <FontAwesomeIcon icon={faAngleRight} />
+                        </button>
+                        <div className="submenu">
+                            <Link href={route("admins.index")}>
+                                <FontAwesomeIcon icon={faUser} />
+                                <p>Admins List</p>
+                            </Link>
+                            <Link href={route("admins.create")}>
+                                <FontAwesomeIcon icon={faUser} />
+                                <p>New Admin</p>
+                            </Link>
+                        </div>
                     </div>
-                </div>
+                ) : null}
+
                 <div className="menu-holder">
                     <button
                         className="menu-item"
@@ -223,10 +226,6 @@ function Sidebar({ auth }) {
                     >
                         <FontAwesomeIcon icon={faRightFromBracket} />
                         <p>Logout</p>
-                    </button>
-                    <button className="delete-account danger">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                        <p>Delete account</p>
                     </button>
                 </div>
             </div>

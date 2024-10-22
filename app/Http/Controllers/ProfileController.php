@@ -7,9 +7,14 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
+
 
 class ProfileController extends Controller
 {
@@ -18,9 +23,9 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
+        return Inertia::render('dashboard/admin/Profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
+            'status' => session('success'),
         ]);
     }
 
@@ -29,15 +34,32 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $fields = $request->validated();
+        $fields['image_path'] =  $fields['image_path'] ?? $request->user()->image_path;
+        if ($fields['image_path'] != $request->user()->image_path) {
+            Storage::disk('public')->deleteDirectory(dirname($request->user()->image_path));
+            $fields['image_path'] =  $fields['image_path']->store('admin/' . Str::random(10), 'public');
         }
+
+        $request->user()->fill($fields);
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return to_route('admin.profile')->with('success', 'Your Profile Was Updated');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', Password::min(8)->numbers()->mixedCase()]
+        ]);
+
+        $user = $request->user();
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+        return to_route('admin.profile')->with('success', 'Your Password Was Updated');
     }
 
     /**
@@ -50,7 +72,9 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-
+        Storage::disk('public')->deleteDirectory(dirname(
+            $user->image_path
+        ));
         Auth::logout();
 
         $user->delete();
@@ -58,6 +82,6 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return Redirect::to('/login');
     }
 }

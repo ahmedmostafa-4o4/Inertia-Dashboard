@@ -4,12 +4,13 @@ import TinyTable from "./TinyTable";
 import Table from "./Table";
 import React from "react";
 import ActiveUsersMap from "./Charts/ActiveUsersMap";
-import LineChart from "./Charts/LineChart";
 import PieChartWithCenterLabel from "./Charts/PieChart";
+
 import Main from "../Main";
 import { Head } from "@inertiajs/react";
+import LineChart from "./Charts/LineChart";
 
-function Home({ auth, latitude, longitude }) {
+function Home({ auth, unreadNotificationsCount }) {
     const data = React.useMemo(
         () => [
             { name: "John", age: 28, status: "Active" },
@@ -42,10 +43,14 @@ function Home({ auth, latitude, longitude }) {
     );
 
     return (
-        <Main header={"Home"} auth={auth}>
+        <Main
+            header={"Home"}
+            auth={auth}
+            unreadNotificationsCount={unreadNotificationsCount}
+        >
             <Head title="Home" />
             <div className="dashboard-home">
-                <div className="totals">
+                <div className="totals animate__animated animate__fadeInUp">
                     <div>
                         <p>Total Sales</p>
 
@@ -95,33 +100,18 @@ function Home({ auth, latitude, longitude }) {
                     <LineChart />
                     <PieChartWithCenterLabel />
                 </div>
-                <ActiveUsersMap latitude={latitude} longitude={longitude} />
+                <ActiveUsersMap />
                 <div className="data">
                     <div>
                         <TinyTable title={"Recent Users"} link={"users"} />
                         <TinyTable title={"Recent Users"} link={"users"} />
                     </div>
-                    <div>
-                        <Table
-                            data={data}
-                            columns={columns}
-                            title="Recent Orders"
-                            pagination={false}
-                            search={false}
-                            sort={false}
-                            link={"users"}
-                        />
+                    <div className="table">
+                        <Table data={data} columns={columns} checkBox={true} />
                     </div>
-                    <div>
-                        <TinyTable title={"Recent Customers"} link={"users"} />
-                        <TinyTable title={"Recent Customers"} link={"users"} />
-                    </div>
-                    <div>
-                        <Table
-                            data={data}
-                            columns={columns}
-                            title="Top Sales Products"
-                        />
+
+                    <div className="table">
+                        <Table data={data} columns={columns} />
                     </div>
                 </div>
             </div>

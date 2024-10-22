@@ -1,35 +1,21 @@
 import Main from "@/Pages/Main";
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import Table from "../Table";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Notify from "../Notify";
+import axios from "axios";
 
-export default function List({ admins, auth }) {
-    console.log(admins);
+export default function List({ admins, auth, status }) {
     const { data } = admins;
-    const handleMenu = (btn) => {
-        const submenu = btn.nextElementSibling;
-        // Toggle the active class on the clicked menu item
-        btn.classList.toggle("active");
-        btn.lastChild.classList.toggle("arrow-down");
-        // Smoothly expand or collapse the submenu
-        if (submenu.classList.contains("main-submenu")) {
-            submenu.style.maxHeight = submenu.scrollHeight + "px";
-        }
-        if (submenu.style.maxHeight) {
-            submenu.style.maxHeight = null;
-        } else {
-            submenu.style.maxHeight = submenu.scrollHeight + "px";
-        }
-    };
 
     const columns = React.useMemo(
         () => [
             { Header: "ID", accessor: "id" },
+            { Header: "Image", accessor: "image_path" },
             { Header: "Name", accessor: "name" },
             { Header: "Email", accessor: "email" },
             { Header: "Phone Number", accessor: "phone_number" },
+            { Header: "Role", accessor: "role" },
             { Header: "Created at", accessor: "created_at" },
             { Header: "Updated at", accessor: "updated_at" },
             { Header: "Created by", accessor: "created_by" },
@@ -41,7 +27,27 @@ export default function List({ admins, auth }) {
     return (
         <Main header="Admins" auth={auth}>
             <Head title="Admins" />
-            <Table data={data} columns={columns} title={"Admins"} />
+            <Table
+                auth={auth}
+                data={data}
+                columns={columns}
+                title={"Admins List"}
+                checkBox={true}
+                actions={{
+                    deleteAll: (rows) =>
+                        router.post(route("admin.deleteMultiple"), {
+                            ids: rows,
+                        }),
+                    notification: (rows) => {
+                        router.get(route("notification.create"), {
+                            ids: rows,
+                        });
+                    },
+                    edit: (id) => route("admins.edit", id),
+                    delete: (id) => router.delete(route("admins.destroy", id)),
+                }}
+            />
+            {status ? <Notify message={status} /> : null}
         </Main>
     );
 }

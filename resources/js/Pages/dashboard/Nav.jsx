@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import UserDropDown from "./UserDropDown";
 import { Link } from "@inertiajs/react";
 
-export default function Nav({ header, auth }) {
+export default function Nav({ header, auth, unReadnotificationsCount }) {
     const [isOpen, setIsOpen] = useState(false);
     const [mode, setMode] = useState("dark");
     const changeMode = () => {
@@ -78,12 +78,7 @@ export default function Nav({ header, auth }) {
     return (
         <>
             {isOpen && <Overlay handleSideBar={handleSideBar} />}
-            <div
-                className="dashboard-nav"
-                style={
-                    !isOpen ? { width: "calc(100% - 10px)", left: "5px" } : null
-                }
-            >
+            <div className={`dashboard-nav ${!isOpen ? "show" : null}`}>
                 <div>
                     <button
                         className="burger-btn"
@@ -94,8 +89,21 @@ export default function Nav({ header, auth }) {
                     <h1>Dashboard | {header}</h1>
                 </div>
                 <div className="actions">
-                    <Link>
+                    <Link
+                        className="relative"
+                        href={route("profile.notifications")}
+                    >
                         <FontAwesomeIcon icon={faBell} />
+
+                        {unReadnotificationsCount !== 0 ? (
+                            <span className="absolute -top-1 -right-1 size-4 rounded-full bg-red-800 text-xs flex justify-center align-middle">
+                                {unReadnotificationsCount > 99
+                                    ? "99+"
+                                    : unReadnotificationsCount}
+                            </span>
+                        ) : (
+                            ""
+                        )}
                     </Link>
                     <button
                         className="light-dark-mode"

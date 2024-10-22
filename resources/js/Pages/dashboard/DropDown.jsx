@@ -2,7 +2,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 
 export default function DropDown(props) {
-    console.log();
     return (
         <DropdownButton
             id="dropdown-basic-button"

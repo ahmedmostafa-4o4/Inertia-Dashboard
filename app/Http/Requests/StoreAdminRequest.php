@@ -26,7 +26,7 @@ class StoreAdminRequest extends FormRequest
         return [
             'name' => ['required', 'max:255'],
             'image_path' => ['nullable', 'image'],
-            'phone_number' => ['numeric', 'digits_between:10,13', Rule::unique('admins')],
+            'phone_number' => ['string', 'digits_between:10,13', Rule::unique('admins')],
             'email' => ['email', 'required', Rule::unique('admins')],
             'role' => ['required', Rule::in('marketing', 'owner', 'sales')],
             'password' => ['required', 'confirmed', Password::min(8)->numbers()->mixedCase()]
