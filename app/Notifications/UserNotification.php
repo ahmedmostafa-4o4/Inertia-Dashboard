@@ -2,14 +2,11 @@
 
 namespace App\Notifications;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
 
 class UserNotification extends Notification implements ShouldQueue
 {

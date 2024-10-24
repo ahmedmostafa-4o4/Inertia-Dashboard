@@ -1,9 +1,8 @@
 import Main from "@/Pages/Main";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import Table from "../Table";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Notify from "../Notify";
-import axios from "axios";
 
 export default function List({ admins, auth, status }) {
     const { data } = admins;

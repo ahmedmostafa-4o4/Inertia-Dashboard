@@ -2,13 +2,14 @@ import {
     faBars,
     faBell,
     faMoon,
+    faRightFromBracket,
     faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Overlay from "./Overlay";
 import { useEffect, useState } from "react";
 import UserDropDown from "./UserDropDown";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 
 export default function Nav({ header, auth, unReadnotificationsCount }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -105,6 +106,7 @@ export default function Nav({ header, auth, unReadnotificationsCount }) {
                             ""
                         )}
                     </Link>
+
                     <button
                         className="light-dark-mode"
                         onClick={() => changeMode()}
@@ -116,7 +118,16 @@ export default function Nav({ header, auth, unReadnotificationsCount }) {
                         )}
                     </button>
 
-                    <UserDropDown auth={auth} />
+                    <UserDropDown
+                        auth={auth}
+                        unReadnotificationsCount={unReadnotificationsCount}
+                    />
+                    <button
+                        className="danger logout-btn"
+                        onClick={() => router.post(route("admin.logout"))}
+                    >
+                        <FontAwesomeIcon icon={faRightFromBracket} />
+                    </button>
                 </div>
             </div>
         </>

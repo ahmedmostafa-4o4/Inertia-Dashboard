@@ -103,8 +103,14 @@ function Home({ auth, unreadNotificationsCount }) {
                 <ActiveUsersMap />
                 <div className="data">
                     <div>
-                        <TinyTable title={"Recent Users"} link={"users"} />
-                        <TinyTable title={"Recent Users"} link={"users"} />
+                        <TinyTable
+                            title={"Recent Users"}
+                            link={"admins.index"}
+                        />
+                        <TinyTable
+                            title={"Recent Users"}
+                            link={"admins.index"}
+                        />
                     </div>
                     <div className="table">
                         <Table data={data} columns={columns} checkBox={true} />

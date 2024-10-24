@@ -8,14 +8,23 @@ export default function Main({ auth, children, header }) {
     const [_notifications, setNotifications] = useState(
         auth.user.notifications
     );
+    const [_unReadNotifications, setUnReadNotifications] = useState(
+        auth.user.unread_notifications
+    );
     const getNotifications = () => {
         axios
             .get(route("notification.get"))
             .then((res) => {
                 const newNotifications = res.data.notifications;
-
+                const newUnreadNotifications = res.data.unread_notifications;
                 if (newNotifications.length !== _notifications.length) {
                     setNotifications(newNotifications);
+                }
+                if (
+                    newUnreadNotifications.length !==
+                    _unReadNotifications.length
+                ) {
+                    setUnReadNotifications(newUnreadNotifications);
                 }
                 if (newNotifications.length > _notifications.length) {
                     setIsVisible(true);
@@ -48,7 +57,7 @@ export default function Main({ auth, children, header }) {
                 <Nav
                     header={header}
                     auth={auth}
-                    unReadnotificationsCount={_notifications.length}
+                    unReadnotificationsCount={_unReadNotifications.length}
                 />
                 {children}
             </div>

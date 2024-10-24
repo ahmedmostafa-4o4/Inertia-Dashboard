@@ -4,11 +4,7 @@ import {
     faUser,
     faBell,
     faAngleRight,
-    faTruckFront,
-    faRotateLeft,
-    faGear,
     faRightFromBracket,
-    faTrashCan,
     faGears,
 } from "@fortawesome/free-solid-svg-icons";
 function Sidebar({ auth }) {
@@ -74,7 +70,7 @@ function Sidebar({ auth }) {
                     </div>
                 ) : null}
 
-                <div className="menu-holder">
+                {/* <div className="menu-holder">
                     <button
                         className="menu-item"
                         onClick={(btn) => handleMenu(btn.currentTarget)}
@@ -218,7 +214,7 @@ function Sidebar({ auth }) {
                             <p>Website Info</p>
                         </Link>
                     </div>
-                </div>
+                </div> */}
                 <div className="actions menu-holder">
                     <button
                         className="logout danger"

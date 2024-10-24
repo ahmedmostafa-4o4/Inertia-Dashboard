@@ -2,13 +2,13 @@ import Dropdown from "@/Components/Dropdown";
 import {
     faAngleRight,
     faBell,
+    faRightFromBracket,
     faSortDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "@inertiajs/react";
-import { useState } from "react";
+import { Link, router } from "@inertiajs/react";
 
-function UserDropDown({ auth }) {
+function UserDropDown({ auth, unReadnotificationsCount }) {
     return (
         <div className="user-dropdown dropdown">
             <Dropdown>
@@ -19,7 +19,9 @@ function UserDropDown({ auth }) {
                                 src={`/storage/${auth.user.image_path}`}
                                 alt=""
                             />
-                            <span className="red-dot"></span>
+                            {unReadnotificationsCount !== 0 && (
+                                <span className="red-dot"></span>
+                            )}
                         </div>{" "}
                         <p>{auth.user.name}</p>
                         <FontAwesomeIcon icon={faSortDown} />
@@ -42,7 +44,29 @@ function UserDropDown({ auth }) {
                             <Link href={route("profile.notifications")}>
                                 <FontAwesomeIcon icon={faBell} />
                                 Notifications
+                                {unReadnotificationsCount !== 0 ? (
+                                    <span className=" size-4 rounded-full bg-red-800 text-xs flex justify-center align-middle">
+                                        {unReadnotificationsCount > 99
+                                            ? "99+"
+                                            : unReadnotificationsCount}
+                                    </span>
+                                ) : (
+                                    ""
+                                )}
                             </Link>
+                            <div className="actions menu-holder">
+                                <button
+                                    className="logout danger"
+                                    onClick={() =>
+                                        router.post(route("admin.logout"))
+                                    }
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faRightFromBracket}
+                                    />
+                                    <p>Logout</p>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </Dropdown.Content>

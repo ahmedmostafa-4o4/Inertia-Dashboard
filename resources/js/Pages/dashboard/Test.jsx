@@ -9,7 +9,6 @@ export default function Test({ auth }) {
     const fetchUsersActivity = () => {
         axios.get(route("admin.users.activity")).then((response) => {
             setUsersStatus(response.data);
-            console.log(response.data);
         });
     };
 

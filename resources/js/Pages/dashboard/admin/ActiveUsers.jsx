@@ -51,12 +51,31 @@ export default function ActiveUsers() {
 
             <div className="users-sidebar hide" ref={sidebarRef}>
                 <div className="users">
-                    <h1>Active Users </h1>
+                    <h1>
+                        Online (
+                        {
+                            usersStatus.filter(
+                                (user) => user.status === "online"
+                            ).length
+                        }
+                        )
+                    </h1>
                     {usersStatus.length &&
                         usersStatus.map(
                             (user) =>
                                 user.status === "online" && (
-                                    <div key={user.user_id} className="user">
+                                    <div
+                                        key={user.user_id}
+                                        className="user cursor-pointer"
+                                        onClick={() =>
+                                            router.get(
+                                                route(
+                                                    "admins.show",
+                                                    user.user_id
+                                                )
+                                            )
+                                        }
+                                    >
                                         <UserImage
                                             src={user.image_path}
                                             status={user.status}
@@ -78,7 +97,8 @@ export default function ActiveUsers() {
                                             <p>{user.email}</p>
                                         </div>
                                         <button
-                                            onClick={() =>
+                                            onClick={(e) => {
+                                                e.stopPropagation();
                                                 router.get(
                                                     route(
                                                         "notification.create"
@@ -86,8 +106,8 @@ export default function ActiveUsers() {
                                                     {
                                                         ids: [user.user_id],
                                                     }
-                                                )
-                                            }
+                                                );
+                                            }}
                                         >
                                             <FontAwesomeIcon icon={faMessage} />
                                         </button>
@@ -95,34 +115,42 @@ export default function ActiveUsers() {
                                 )
                         )}
 
-                    <h1>Disactive Users</h1>
+                    <h1>
+                        Offline (
+                        {
+                            usersStatus.filter(
+                                (user) => user.status !== "online"
+                            ).length
+                        }
+                        )
+                    </h1>
                     {usersStatus.length &&
                         usersStatus.map(
                             (user) =>
                                 user.status !== "online" && (
-                                    <div key={user.user_id} className="user">
+                                    <div
+                                        key={user.user_id}
+                                        className="user cursor-pointer"
+                                        onClick={() =>
+                                            router.get(
+                                                route(
+                                                    "admins.show",
+                                                    user.user_id
+                                                )
+                                            )
+                                        }
+                                    >
                                         <UserImage
                                             src={user.image_path}
                                             status={user.status}
                                         />
                                         <div className="detailes ">
-                                            <h5
-                                                className="cursor-pointer"
-                                                onClick={() =>
-                                                    router.get(
-                                                        route(
-                                                            "admins.show",
-                                                            user.user_id
-                                                        )
-                                                    )
-                                                }
-                                            >
-                                                {user.name}
-                                            </h5>
+                                            <h5>{user.name}</h5>
                                             <p>{user.email}</p>
                                         </div>
                                         <button
-                                            onClick={() =>
+                                            onClick={(e) => {
+                                                e.stopPropagation();
                                                 router.get(
                                                     route(
                                                         "notification.create"
@@ -130,8 +158,8 @@ export default function ActiveUsers() {
                                                     {
                                                         ids: [user.user_id],
                                                     }
-                                                )
-                                            }
+                                                );
+                                            }}
                                         >
                                             <FontAwesomeIcon icon={faMessage} />
                                         </button>

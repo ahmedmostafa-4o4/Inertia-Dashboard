@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Notification;
 use App\Notifications\UserNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
@@ -26,8 +27,9 @@ class NotificationController extends Controller
     public function getNotifications()
     {
         $notifications = Auth::user()->notifications;
+        $unread_notifications = Auth::user()->unreadNotifications;
 
-        return response()->json(['notifications' => $notifications]);
+        return response()->json(['notifications' => $notifications, 'unread_notifications' => $unread_notifications]);
     }
 
     public function sendNotification(Request $request)
@@ -69,9 +71,8 @@ class NotificationController extends Controller
      */
     public function show(Notification $notification)
     {
-        $user = Auth::user();
-        $user->unreadNotifications->markAsRead();
-
+        $notification->read_at = now();
+        $notification->save(); // Manually saving the read_at field
         return Inertia::render('dashboard/notifications/Show', ["notification" => $notification]);
     }
 
@@ -99,5 +100,11 @@ class NotificationController extends Controller
         $notification->delete();
 
         return to_route('profile.notifications')->with('success', 'Notification Deleted Successfully');
+    }
+    public function destroyAll(Request $request)
+    {
+        $request->user()->notifications()->delete();
+
+        return to_route('profile.notifications')->with('success', 'All Notifications Deleted Successfully');
     }
 }
