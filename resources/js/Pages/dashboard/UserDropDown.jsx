@@ -1,7 +1,7 @@
 import Dropdown from "@/Components/Dropdown";
 import {
     faAngleRight,
-    faBell,
+    faMessage,
     faRightFromBracket,
     faSortDown,
 } from "@fortawesome/free-solid-svg-icons";
@@ -41,9 +41,12 @@ function UserDropDown({ auth, unReadnotificationsCount }) {
                             View profile <FontAwesomeIcon icon={faAngleRight} />
                         </Link>
                         <div className="options">
-                            <Link href={route("profile.notifications")}>
-                                <FontAwesomeIcon icon={faBell} />
-                                Notifications
+                            <Link
+                                href={route("profile.notifications")}
+                                className="!justify-center"
+                            >
+                                <FontAwesomeIcon icon={faMessage} />
+                                Chats
                                 {unReadnotificationsCount !== 0 ? (
                                     <span className=" size-4 rounded-full bg-red-800 text-xs flex justify-center align-middle">
                                         {unReadnotificationsCount > 99
@@ -54,7 +57,7 @@ function UserDropDown({ auth, unReadnotificationsCount }) {
                                     ""
                                 )}
                             </Link>
-                            <div className="actions menu-holder">
+                            <div className="actions ">
                                 <button
                                     className="logout danger"
                                     onClick={() =>

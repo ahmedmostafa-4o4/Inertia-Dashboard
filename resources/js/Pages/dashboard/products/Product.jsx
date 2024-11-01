@@ -1,12 +1,14 @@
 import Main from "@/Pages/Main";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import Table from "../Table";
 import React from "react";
 
-export default function Product({ auth }) {
-    const data = React.useMemo(
+export default function Product({ auth, product }) {
+    const { data } = product;
+    console.log(data);
+    const _data = React.useMemo(
         () => [
             { name: "John", age: 28, status: "Active" },
             { name: "Doe", age: 23, status: "Inactive" },
@@ -38,7 +40,7 @@ export default function Product({ auth }) {
     );
 
     return (
-        <Main header={"Product"}>
+        <Main header={"Product"} auth={auth}>
             <Head title="Product" />
             <div className="product-page">
                 <div className="title">
@@ -51,12 +53,12 @@ export default function Product({ auth }) {
 
                 <div className="data-body">
                     <div className="image">
-                        <img src="/images/default-user.jpg" alt="" />
+                        <img src={`/storage/${data.image1}`} alt="" />
                     </div>
 
                     <div className="detailes">
                         <div className="category-rate">
-                            <p className="category">Category</p>
+                            <p className="category">{data.category}</p>
                             <div className="rate">
                                 <div>
                                     <FontAwesomeIcon icon={faStar} />
@@ -69,18 +71,12 @@ export default function Product({ auth }) {
                                 <p>4.5</p>
                             </div>
                         </div>
-                        <h1 className="name">Product Name</h1>
-                        <p className="description">
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Deserunt repudiandae modi laborum nihil, harum
-                            cum inventore? Laborum eaque illum fuga natus id,
-                            magni molestias incidunt explicabo delectus totam
-                            nisi quo?
-                        </p>
-                        <p className="price">299.9 EG</p>
+                        <h1 className="name">{data.title}</h1>
+                        <p className="description">{data.description}</p>
+                        <p className="price"> {data.price} EG</p>
                         <div className="by-section">
                             <p className="stock">
-                                <h4>Stock:</h4> 300 Pieces
+                                <h4>Stock:</h4> {data.stock} Pieces
                             </p>
                             <p className="ordered-by">
                                 <h4>Ordered by:</h4> 457 Client
@@ -89,23 +85,42 @@ export default function Product({ auth }) {
                                 <h4>Returned by:</h4> 38 Client
                             </p>
                             <p className="created-at">
-                                <h4>Created at:</h4> 2024-3-12 4:33:33
+                                <h4>Created at:</h4> {data.created_at}
                             </p>
                             <p className="updated-at">
-                                <h4>Updated at:</h4> 2024-12-10 11:32:56
+                                <h4>Updated at:</h4> {data.updated_at}
                             </p>
-                            <p className="created-by">
-                                <h4>Created by:</h4> Ahmed Mostafa
+                            <p className="created-by ">
+                                <h4>Created by:</h4>
+
+                                <Link
+                                    className="underline"
+                                    href={route(
+                                        "admins.show",
+                                        data.created_by.id
+                                    )}
+                                >
+                                    {data.created_by.name}
+                                </Link>
                             </p>
                             <p className="updated-by">
-                                <h4>Updated by:</h4> Mohammed Ahmed
+                                <h4>Updated by:</h4>{" "}
+                                <Link
+                                    className="underline"
+                                    href={route(
+                                        "admins.show",
+                                        data.updated_by.id
+                                    )}
+                                >
+                                    {data.updated_by.name}
+                                </Link>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <Table data={data} columns={columns} title={"Ordered By"} />
-            <Table data={data} columns={columns} title={"Returned By"} />
+            <Table data={_data} columns={columns} title={"Ordered By"} />
+            <Table data={_data} columns={columns} title={"Returned By"} />
         </Main>
     );
 }

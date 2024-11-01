@@ -1,12 +1,10 @@
-import InputError from "@/Components/InputError";
 import Main from "@/Pages/Main";
 
 import { router, useForm } from "@inertiajs/react";
 
 export default function SendNotification({ auth, users }) {
-    const { data, setData, post, errors } = useForm({
+    const { data, setData, post } = useForm({
         users: users,
-        title: "",
         message: "",
     });
     const handleForm = (e) => {
@@ -19,15 +17,6 @@ export default function SendNotification({ auth, users }) {
             <div className="dashboard-form">
                 <h1>Send Notification</h1>
                 <form onSubmit={handleForm} className="input-style">
-                    <input
-                        type="text"
-                        name="title"
-                        placeholder="Title"
-                        value={data.title}
-                        onChange={(e) => setData("title", e.target.value)}
-                    />
-                    <InputError message={errors.title} className="error" />
-
                     <textarea
                         name="message"
                         placeholder="Message"

@@ -15,18 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Admin::factory(10)->create();
+        Admin::factory(100)->create();
 
-        Admin::factory()->create([
-            'name' => "Ahmed Mostafa",
-            'email' => "lofylofy56@gmail.com",
-            'password' => Hash::make("Lofylofy56"),
-            'phone_number' => "01025250321",
-            'role' => "owner",
-            'created_at' => now(),
-            'updated_at' => now(),
-            'created_by' => "Ahmed Mostafa",
-            'updated_by' => "Ahmed Mostafa",
-        ]);
+        // Admin::factory()->create([
+        //     'name' => "Ahmed Mostafa",
+        //     'email' => "lofylofy56@gmail.com",
+        //     'password' => Hash::make("Lofylofy56"),
+        //     'phone_number' => "01025250321",
+        //     'role' => "owner",
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        //     'created_by' => "Ahmed Mostafa",
+        //     'updated_by' => "Ahmed Mostafa",
+        // ]);
     }
 }

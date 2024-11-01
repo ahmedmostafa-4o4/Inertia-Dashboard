@@ -10,7 +10,8 @@ import Main from "../Main";
 import { Head } from "@inertiajs/react";
 import LineChart from "./Charts/LineChart";
 
-function Home({ auth, unreadNotificationsCount }) {
+function Home({ auth, unreadNotificationsCount, locations }) {
+    console.log(locations);
     const data = React.useMemo(
         () => [
             { name: "John", age: 28, status: "Active" },
@@ -100,7 +101,7 @@ function Home({ auth, unreadNotificationsCount }) {
                     <LineChart />
                     <PieChartWithCenterLabel />
                 </div>
-                <ActiveUsersMap />
+                <ActiveUsersMap locations={locations} />
                 <div className="data">
                     <div>
                         <TinyTable

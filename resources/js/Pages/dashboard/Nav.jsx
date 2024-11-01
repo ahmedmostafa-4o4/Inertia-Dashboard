@@ -1,6 +1,6 @@
 import {
     faBars,
-    faBell,
+    faMessage,
     faMoon,
     faRightFromBracket,
     faSun,
@@ -91,10 +91,10 @@ export default function Nav({ header, auth, unReadnotificationsCount }) {
                 </div>
                 <div className="actions">
                     <Link
-                        className="relative"
+                        className="relative text-xs flex items-center justify-center"
                         href={route("profile.notifications")}
                     >
-                        <FontAwesomeIcon icon={faBell} />
+                        <FontAwesomeIcon icon={faMessage} />
 
                         {unReadnotificationsCount !== 0 ? (
                             <span className="absolute -top-1 -right-1 size-4 rounded-full bg-red-800 text-xs flex justify-center align-middle">

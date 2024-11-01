@@ -1,6 +1,6 @@
 export default function UserImage({ auth, src = null, status }) {
     return (
-        <div className="w-fit relative">
+        <div className="w-fit relative user-image">
             <img
                 src={`/storage/${src}`}
                 alt="User image"

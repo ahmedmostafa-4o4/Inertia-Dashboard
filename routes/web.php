@@ -4,88 +4,110 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Middleware\AdminPermissionsMiddleware;
-use App\Http\Resources\AdminResource;
 use App\Models\Admin;
-use Carbon\Carbon;
+use App\Models\UserRequest;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Stevebauman\Location\Facades\Location;
 
-Route::redirect('/', '/admin');
-// $location = Location::get("8.8.8.8");
-// if ($location) {
-//     $latitude = $location->latitude;
-//     $longitude = $location->longitude;
-//     return Inertia::render('dashboard/Home', ["latitude" => $latitude, "longitude" => $longitude]);
-// } else {
-//     return "Unable to retrieve location for IP address: " . request()->ip();
-// }
+Route::redirect('/', '/dashboard');
+
+
 Route::middleware('auth:admin')->group(function () {
-    Route::get('admin', function () {
 
-        return Inertia::render('dashboard/Home',);
-    })->name('home');
-    // Route::get('/admin/users', function () {
-    //     return Inertia::render('dashboard/Users',);
-    // })->name('users');
-    // Route::get('/admin/products', function () {
-    //     return Inertia::render('dashboard/products/List',);
-    // })->name('products');
-    // Route::get('/admin/add-product', function () {
-    //     return Inertia::render('dashboard/products/Add',);
-    // })->name('addProduct');
-    // Route::get('/admin/products/{id}', function ($id) {
-    //     return Inertia::render('dashboard/products/Product',);
-    // })->name('product');
-    // Route::get('/admin/profile/{id}', function ($id) {
-    //     return Inertia::render('dashboard/admin/Profile',);
-    // })->name('profile');
-    // Route::get('/admin/orders', function () {
-    //     return Inertia::render('dashboard/orders/List',);
-    // })->name('orders');
-    // Route::get('/admin/add-order', function () {
-    //     return Inertia::render('dashboard/orders/Add',);
-    // })->name('addOrder');
-    // Route::get('/admin/add-user', function () {
-    //     return Inertia::render('dashboard/users/Add',);
-    // })->name('addUser');
-    // Route::get('/admin/returns', function () {
-    //     return Inertia::render('dashboard/returns/List',);
-    // })->name('returns');
-    // Route::get('/admin/add-return', function () {
-    //     return Inertia::render('dashboard/returns/Add',);
-    // })->name('addReturn');
-    Route::resource('admins', AdminController::class)->middleware('role');
-    Route::post('admins/deleteMultiple', [AdminController::class, 'deleteMultiple'])->name('admin.deleteMultiple');
+    Route::middleware('logRequest')->group(function () {
 
-    // Route::resource('products', ProductController::class);
+        Route::get('dashboard', function () {
+            $ipAddresses = DB::table('sessions')->pluck('ip_address')->filter()->toArray(); // Filter out nulls
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile');
+            $locations = [];
 
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+            foreach ($ipAddresses as $index => $ip) {
+                $location = Location::get($ip);
 
-    Route::post('/profile/delete', action: [ProfileController::class, 'destroy'])->name('profile.delete');
+                if ($location) {
+                    $locations[] = [
+                        "id" => $index,  // Unique ID for each location
+                        "position" => [
+                            "lat" => $location->latitude,
+                            "lng" => $location->longitude,
+                        ],
+                        "name" => "User $index",  // Placeholder name; replace as needed
+                    ];
+                } else {
+                    $locations[] = [
+                        "id" => $index,
+                        "position" => null,
+                        "name" => "User $index",
+                        "error" => "Unable to retrieve location for IP: $ip"
+                    ];
+                }
+            }
 
-    Route::put(
-        '/profile/change_password',
-        [ProfileController::class, 'changePassword']
-    )->name('admin.change_password');
+            return Inertia::render('dashboard/Home', ["locations" => $locations]);
+        })->name('home');
+
+        Route::resource('admins', AdminController::class)->middleware('role');
+        Route::post('admins/deleteMultiple', [AdminController::class, 'deleteMultiple'])->name('admin.deleteMultiple');
+
+        Route::resource('products', ProductController::class)->middleware('role');
+        Route::post('products/destory', [ProductController::class, 'destroyAll'])->name('products.destroyAll');
+
+        Route::resource('categories', CategoryController::class)->middleware('role');
+        Route::post('categories/destory', [CategoryController::class, 'destroyMultiple'])->name('categories.destroyMultiple');
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile');
+
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        Route::post('/profile/delete', action: [ProfileController::class, 'destroy'])->name('profile.delete');
+
+        Route::put('/profile/change_password', [ProfileController::class, 'changePassword'])->name('admin.change_password');
+
+        Route::delete('/profile/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notification.destroy');
+
+        Route::delete('/profile/notifications', [NotificationController::class, 'destroyAll'])->name('notification.destroyAll');
+
+        Route::get('/profile/notifications/{notification}/{id}/{notifiable_id}', [NotificationController::class, 'show'])->name('notification.read');
+
+        Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+        Route::get('/track-user-activity/{id}', function (string $id) {
+            $userRequests = UserRequest::select('description', 'id', 'requested_at', 'method', 'payload')->where('admin_id', $id)->orderByDesc('requested_at')->get();
+            return Inertia::render('dashboard/TrackUser', ['userRequests' => $userRequests]);
+        })->name('userRequests');
+
+        Route::post('/track-user-activity', function (Request $request) {
+            $ids = $request->input('ids');
+            if (!empty($ids)) {
+                $requests = UserRequest::whereIn('id', $ids);
+                $requests->delete();
+            }
+
+            return Redirect::back()->with('success', 'Requests Was Deleted');
+        })->name('userRequests.delete');
+    });
 
     Route::post("/send-notification", [NotificationController::class, 'sendNotification'])->name('notification.send');
+
     Route::get("/create-notification", [NotificationController::class, 'create'])->name('notification.create');
+
     Route::get("/get-notifications", [NotificationController::class, 'getNotifications'])->name('notification.get');
-    Route::delete('/profile/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notification.destroy');
-    Route::delete('/profile/notifications', [NotificationController::class, 'destroyAll'])->name('notification.destroyAll');
-    Route::post('/profile/notifications/{notification}', [NotificationController::class, 'show'])->name('notification.read');
+
     Route::get('/profile/notifications', [NotificationController::class, 'index'])->name('profile.notifications');
+
+    Route::get('/profile/chat', [NotificationController::class, 'json_show'])->name('profile.chats');
+
+    Route::post('/profile/chat/send-message', [NotificationController::class, 'sendMessage'])->name('profile.sendMessage');
+
     Route::get('/active-users', function () {
         // Fetch all users
         $users = Admin::all();
@@ -133,6 +155,7 @@ Route::middleware('auth:admin')->group(function () {
 
         return response()->json($usersStatus); // Return the users' online/offline status
     })->name('admin.users.activity');
+
     Route::get('active-users-check', function () {
         return Inertia::render('dashboard/Test');
     });
@@ -156,4 +179,8 @@ Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login'
 
 Route::post('login', [AdminAuthController::class, 'login']);
 
-Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+Route::get('register', [RegisteredUserController::class, 'create'])
+    ->name('register');
+
+Route::post('register', [RegisteredUserController::class, 'store']);

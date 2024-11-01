@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import Main from "../../Main";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { Head, Link, router } from "@inertiajs/react";
 import Notify from "../Notify";
 import axios from "axios";
@@ -9,7 +7,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import Swal from "sweetalert2";
+import UserImage from "@/Components/UserImage";
 
 dayjs.extend(relativeTime);
 dayjs.extend(isSameOrBefore);
@@ -40,9 +38,7 @@ export default function Notifications({ auth, notifications, status }) {
             .get(route("notification.get"))
             .then((res) => {
                 const newNotifications = res.data.notifications;
-                if (newNotifications.length !== _notifications.length) {
-                    setNotifications(updatedNotifications(newNotifications));
-                }
+                setNotifications(updatedNotifications(newNotifications));
             })
             .catch((error) => {
                 console.error("Error fetching notifications: ", error);
@@ -53,26 +49,6 @@ export default function Notifications({ auth, notifications, status }) {
         return message.length > length
             ? `${message.slice(0, length)}...`
             : message;
-    };
-
-    const alertPopup = (action = () => {}) => {
-        Swal.fire({
-            title: "Are You Sure?",
-            showCancelButton: true,
-            confirmButtonText: "Sure",
-            showClass: {
-                popup: "animate__animated animate__backInDown", // animation on show
-            },
-            hideClass: {
-                popup: "animate__animated animate__backOutDown", // animation on hide
-            },
-        }).then((result) => {
-            if (result.isConfirmed) {
-                action();
-                setSelectedRows([]);
-                // You can handle the textarea value here
-            }
-        });
     };
 
     useEffect(() => {
@@ -87,24 +63,7 @@ export default function Notifications({ auth, notifications, status }) {
         <div className="notifications">
             <Main auth={auth} header={"Notifications"}>
                 <Head title="Notifications" />
-                <div className="title">
-                    <div className="actions">
-                        <button
-                            className="danger"
-                            onClick={() =>
-                                alertPopup(() =>
-                                    router.delete(
-                                        route("notification.destroyAll")
-                                    )
-                                )
-                            }
-                        >
-                            {" "}
-                            <FontAwesomeIcon icon={faTrashCan} />
-                            Delete all
-                        </button>
-                    </div>
-                </div>
+                <div className="title"></div>
                 <div className="notifications-holder">
                     {_notifications.length ? (
                         _notifications.map((notify) => (
@@ -116,61 +75,63 @@ export default function Notifications({ auth, notifications, status }) {
                                         : `notification`
                                 }
                                 onClick={() => {
-                                    router.post(
-                                        route("notification.read", notify.id)
+                                    router.get(
+                                        route("notification.read", {
+                                            notification: notify.id,
+                                            id: notify.data.sender_data.id,
+                                            notifiable_id: notify.notifiable_id,
+                                        })
                                     );
                                 }}
                             >
                                 <div>
-                                    <p className="subject">
-                                        {notify.data.title}
-                                    </p>
-                                    <p className="message">
-                                        {truncateMessage(
-                                            notify.data.message,
-                                            150
+                                    {" "}
+                                    <Link
+                                        onClick={(e) => e.stopPropagation()}
+                                        href={route(
+                                            "admins.show",
+                                            notify.data.sender_data.id
                                         )}
-                                    </p>
-                                    <div>
-                                        <Link
-                                            href={route(
-                                                "admins.show",
-                                                notify.data.sender_data.id
-                                            )}
-                                            className="hover:underline"
-                                        >
-                                            From:{" "}
-                                            {notify.data.sender_data &&
-                                                notify.data.sender_data.name}
-                                        </Link>
-                                        <p className="message">
-                                            {notify.created_at}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="actions">
-                                    <button
-                                        className="danger"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            alertPopup(() =>
-                                                router.delete(
-                                                    route(
-                                                        "notification.destroy",
-                                                        notify.id
-                                                    )
-                                                )
-                                            );
-                                        }}
+                                        className="hover:underline flex items-center gap-2 mb-2"
                                     >
-                                        <FontAwesomeIcon icon={faTrashCan} />
-                                    </button>
+                                        <UserImage
+                                            auth={auth}
+                                            src={
+                                                notify.data.sender_data
+                                                    .image_path
+                                            }
+                                        />
+                                        <div>
+                                            <p className="text-sm">
+                                                {notify.data.sender_data &&
+                                                    notify.data.sender_data
+                                                        .name}
+                                            </p>
+                                            <p className="text-xs text-slate-300">
+                                                {notify.data.sender_data &&
+                                                    notify.data.sender_data
+                                                        .email}
+                                            </p>
+                                        </div>
+                                    </Link>
+                                    <div>
+                                        <p className="message">
+                                            {truncateMessage(
+                                                notify.data.message,
+                                                150
+                                            )}
+                                        </p>
+                                        <div>
+                                            <p className="message">
+                                                {notify.created_at}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <p>There is no notifications for you</p>
+                        <p>There is no messages </p>
                     )}
                 </div>
             </Main>

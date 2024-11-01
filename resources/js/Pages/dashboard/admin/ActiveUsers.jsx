@@ -3,8 +3,9 @@ import Overlay from "../Overlay";
 import axios from "axios";
 import UserImage from "@/Components/UserImage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMessage } from "@fortawesome/free-solid-svg-icons";
+import { faMessage, faUserSecret } from "@fortawesome/free-solid-svg-icons";
 import { router } from "@inertiajs/react";
+import Dropdown from "@/Components/Dropdown";
 
 export default function ActiveUsers() {
     const sidebarRef = useRef();
@@ -64,53 +65,72 @@ export default function ActiveUsers() {
                         usersStatus.map(
                             (user) =>
                                 user.status === "online" && (
-                                    <div
-                                        key={user.user_id}
-                                        className="user cursor-pointer"
-                                        onClick={() =>
-                                            router.get(
-                                                route(
-                                                    "admins.show",
-                                                    user.user_id
-                                                )
-                                            )
-                                        }
-                                    >
-                                        <UserImage
-                                            src={user.image_path}
-                                            status={user.status}
-                                        />
-                                        <div className="detailes">
-                                            <h5
-                                                className="cursor-pointer"
-                                                onClick={() =>
-                                                    router.get(
-                                                        route(
-                                                            "admins.show",
-                                                            user.user_id
-                                                        )
-                                                    )
-                                                }
-                                            >
-                                                {user.name}
-                                            </h5>
-                                            <p>{user.email}</p>
-                                        </div>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
+                                    <div className="relative">
+                                        <div
+                                            key={user.user_id}
+                                            className="user cursor-pointer"
+                                            onClick={() =>
                                                 router.get(
                                                     route(
-                                                        "notification.create"
-                                                    ),
-                                                    {
-                                                        ids: [user.user_id],
-                                                    }
-                                                );
-                                            }}
+                                                        "admins.show",
+                                                        user.user_id
+                                                    )
+                                                )
+                                            }
                                         >
-                                            <FontAwesomeIcon icon={faMessage} />
-                                        </button>
+                                            <UserImage
+                                                src={user.image_path}
+                                                status={user.status}
+                                            />
+                                            <div className="detailes">
+                                                <h5
+                                                    className="cursor-pointer"
+                                                    onClick={() =>
+                                                        router.get(
+                                                            route(
+                                                                "admins.show",
+                                                                user.user_id
+                                                            )
+                                                        )
+                                                    }
+                                                >
+                                                    {user.name}
+                                                </h5>
+                                                <p>{user.email}</p>
+                                            </div>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    router.get(
+                                                        route(
+                                                            "notification.create"
+                                                        ),
+                                                        {
+                                                            ids: [user.user_id],
+                                                        }
+                                                    );
+                                                }}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faMessage}
+                                                />
+                                            </button>
+                                            <Dropdown>
+                                                <Dropdown.Link
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                    href={route(
+                                                        "userRequests",
+                                                        user.user_id
+                                                    )}
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={faUserSecret}
+                                                    />
+                                                </Dropdown.Link>
+                                            </Dropdown>
+                                        </div>
                                     </div>
                                 )
                         )}
@@ -163,6 +183,21 @@ export default function ActiveUsers() {
                                         >
                                             <FontAwesomeIcon icon={faMessage} />
                                         </button>
+                                        <Dropdown>
+                                            <Dropdown.Link
+                                                onClick={(e) =>
+                                                    e.stopPropagation()
+                                                }
+                                                href={route(
+                                                    "userRequests",
+                                                    user.user_id
+                                                )}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faUserSecret}
+                                                />
+                                            </Dropdown.Link>
+                                        </Dropdown>
                                     </div>
                                 )
                         )}

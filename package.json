@@ -40,6 +40,7 @@
         "@mui/icons-material": "^6.1.2",
         "@mui/x-charts": "^7.19.0",
         "animate.css": "^4.1.1",
+        "datatables.net-dt": "^2.1.8",
         "dayjs": "^1.11.13"
     }
 }

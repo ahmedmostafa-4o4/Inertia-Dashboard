@@ -59,16 +59,55 @@ function Sidebar({ auth }) {
                         </button>
                         <div className="submenu">
                             <Link href={route("admins.index")}>
-                                <FontAwesomeIcon icon={faUser} />
+                                <span className="dot"></span>
                                 <p>Admins List</p>
                             </Link>
                             <Link href={route("admins.create")}>
-                                <FontAwesomeIcon icon={faUser} />
+                                <span className="dot"></span>
+
                                 <p>New Admin</p>
                             </Link>
                         </div>
                     </div>
                 ) : null}
+                <div className="menu-holder">
+                    <button
+                        className="menu-item"
+                        onClick={(btn) => handleMenu(btn.currentTarget)}
+                    >
+                        Products
+                        <FontAwesomeIcon icon={faAngleRight} />
+                    </button>
+                    <div className="submenu">
+                        <Link href={route("products.index")}>
+                            <span className="dot"></span>
+                            <p>Products List</p>
+                        </Link>
+                        <Link href={route("products.create")}>
+                            <span className="dot"></span>
+                            <p>Add Product</p>
+                        </Link>
+                    </div>
+                </div>
+                <div className="menu-holder">
+                    <button
+                        className="menu-item"
+                        onClick={(btn) => handleMenu(btn.currentTarget)}
+                    >
+                        Categories
+                        <FontAwesomeIcon icon={faAngleRight} />
+                    </button>
+                    <div className="submenu">
+                        <Link href={route("categories.index")}>
+                            <span className="dot"></span>
+                            <p>Categories List</p>
+                        </Link>
+                        <Link href={route("categories.create")}>
+                            <span className="dot"></span>
+                            <p>Add Category</p>
+                        </Link>
+                    </div>
+                </div>
 
                 {/* <div className="menu-holder">
                     <button
@@ -158,25 +197,7 @@ function Sidebar({ auth }) {
                         </Link>
                     </div>
                 </div>
-                <div className="menu-holder">
-                    <button
-                        className="menu-item"
-                        onClick={(btn) => handleMenu(btn.currentTarget)}
-                    >
-                        Products
-                        <FontAwesomeIcon icon={faAngleRight} />
-                    </button>
-                    <div className="submenu">
-                        <Link href={route("products")}>
-                            <FontAwesomeIcon icon={faUser} />
-                            <p>Products List</p>
-                        </Link>
-                        <Link href={route("addProduct")}>
-                            <FontAwesomeIcon icon={faBell} />
-                            <p>Add Product</p>
-                        </Link>
-                    </div>
-                </div>
+
                 <div className="menu-holder">
                     <button
                         className="menu-item"
@@ -217,7 +238,7 @@ function Sidebar({ auth }) {
                 </div> */}
                 <div className="actions menu-holder">
                     <button
-                        className="logout danger"
+                        className="logout danger "
                         onClick={() => router.post(route("admin.logout"))}
                     >
                         <FontAwesomeIcon icon={faRightFromBracket} />

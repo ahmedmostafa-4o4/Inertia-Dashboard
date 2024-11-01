@@ -1,4 +1,5 @@
 import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
 import Main from "@/Pages/Main";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,7 +29,10 @@ function AddAdmin({ auth, admin }) {
             <div className="dashboard-form">
                 <h1>Edit Admin | {data.name}</h1>
                 <form onSubmit={handleForm} className="input-style">
+                    <InputLabel htmlFor="name" value={"Full Name"} />
+
                     <input
+                        id="name"
                         type="text"
                         name="name"
                         placeholder="Full Name"
@@ -36,17 +40,23 @@ function AddAdmin({ auth, admin }) {
                         onChange={(e) => setData("name", e.target.value)}
                     />
                     <InputError message={errors.name} className="error" />
+                    <InputLabel htmlFor="email" value={"Email"} />
+
                     <input
+                        id="email"
                         type="email"
-                        name="name"
+                        name="email"
                         placeholder="Email"
                         value={data.email}
                         onChange={(e) => setData("email", e.target.value)}
                     />
                     <InputError message={errors.email} className="error" />
+                    <InputLabel htmlFor="phone_number" value={"Phone Number"} />
+
                     <input
+                        id="phone_number"
                         type="text"
-                        name="name"
+                        name="phone_number"
                         placeholder="Phone Number"
                         value={data.phone_number}
                         onChange={(e) =>
@@ -57,6 +67,7 @@ function AddAdmin({ auth, admin }) {
                         message={errors.phone_number}
                         className="error"
                     />
+                    <InputLabel htmlFor="image" value={"Avatar"} />
 
                     <input
                         type="file"
@@ -87,8 +98,11 @@ function AddAdmin({ auth, admin }) {
                         Avatar
                     </button>
                     <InputError message={errors.image_path} className="error" />
+                    <InputLabel htmlFor="role" value={"Role"} />
 
                     <select
+                        name="role"
+                        id="role"
                         onChange={(e) => setData("role", e.target.value)}
                         value={data.role || ""}
                     >
@@ -110,7 +124,7 @@ function AddAdmin({ auth, admin }) {
                     <div className="flex justify-center align-middle gap-2">
                         <button className="flex-1 primary">Edit</button>
                         <button
-                            className="flex-1 danger"
+                            className="danger"
                             onClick={(e) => {
                                 e.preventDefault();
                                 router.get(route("admins.index"));

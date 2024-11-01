@@ -22,10 +22,10 @@ class AdminResource extends JsonResource
             'image_path' => $this->image_path,
             'role' => $this->role,
             'phone_number' => $this->phone_number,
-            'created_at' => (new Carbon($this->created_at))->format("Y-m-d"),
-            'updated_at' => (new Carbon($this->updated_at))->format("Y-m-d"),
-            'created_by' => $this->creator ? $this->creator->name : "Unkown Creator",
-            'updated_by' => $this->updator ? $this->updator->name : "Unkown Updator",
+            'created_at' => (new Carbon($this->created_at))->format("d M Y H:i"),
+            'updated_at' => (new Carbon($this->updated_at))->format("d M Y H:i"),
+            'created_by' => $this->creator ? ['name' => $this->creator->name, 'id' => $this->creator->id] : "Unkown Creator",
+            'updated_by' => $this->updator ? ['name' => $this->updator->name, 'id' => $this->updator->id] : "Unkown Updator",
         ];
     }
 }

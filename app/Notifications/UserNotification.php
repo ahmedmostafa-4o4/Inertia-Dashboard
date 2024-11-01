@@ -14,14 +14,12 @@ class UserNotification extends Notification implements ShouldQueue
     use SerializesModels;
 
     public $message;
-    public $title;
     public $senderData;
     /**
      * Create a new notification instance.
      */
-    public function __construct($title, $message, $senderData)
+    public function __construct($message, $senderData)
     {
-        $this->title = $title;
         $this->message = $message;
         $this->senderData = $senderData;
     }
@@ -63,7 +61,6 @@ class UserNotification extends Notification implements ShouldQueue
     {
         return [
             'message' => $this->message,
-            'title' => $this->title,
             'user_id' => $notifiable->id,  // The user being notified
             'sender_data' => $this->senderData,  // The user being notified
         ];

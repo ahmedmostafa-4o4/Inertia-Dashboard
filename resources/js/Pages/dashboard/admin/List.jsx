@@ -3,6 +3,8 @@ import { Head, router } from "@inertiajs/react";
 import Table from "../Table";
 import React from "react";
 import Notify from "../Notify";
+import { faPlus, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function List({ admins, auth, status }) {
     const { data } = admins;
@@ -26,12 +28,26 @@ export default function List({ admins, auth, status }) {
     return (
         <Main header="Admins" auth={auth}>
             <Head title="Admins" />
+            <div className="title !justify-end">
+                <div className="actions">
+                    <button
+                        className="primary"
+                        onClick={() => router.get(route("admins.create"))}
+                    >
+                        {" "}
+                        <FontAwesomeIcon icon={faPlus} />
+                        Add
+                    </button>
+                </div>
+            </div>
             <Table
                 auth={auth}
                 data={data}
                 columns={columns}
                 title={"Admins List"}
                 checkBox={true}
+                show={"admins.show"}
+                className="admins-table"
                 actions={{
                     deleteAll: (rows) =>
                         router.post(route("admin.deleteMultiple"), {

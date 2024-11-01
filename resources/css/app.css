@@ -9,6 +9,7 @@
     --blue-color-O: #488aec09;
     --dark-blue: #04305f;
     --display-mode: #f5f5f5;
+    --border-color: rgba(0, 50, 189, 0.363);
     --color: black;
     --gray-color: var(--sec-gray-color);
     --sec-gray-color: rgb(240, 240, 240);
@@ -312,7 +313,79 @@
 }
 
 .swal2-popup {
-    background-color: var(--dark-blue);
+    background-color: var(--dashboard-sec-color);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+
+    h2 {
+        color: var(--text-color);
+        font-weight: 100;
+        padding: 0;
+
+        display: flex !important;
+        flex-direction: column;
+        margin-bottom: 20px;
+
+        span {
+            color: red;
+            font-size: 16px;
+            text-align: start;
+            font-weight: 400;
+        }
+    }
+
+    .swal2-actions {
+        margin: 0;
+
+        button {
+            padding: 5px 10px;
+        }
+
+        .swal2-cancel {
+            color: red;
+            padding: 6px 15px;
+            border: 1px solid transparent;
+            background-color: rgba(255, 0, 0, 0.178);
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -ms-border-radius: 5px;
+            -o-border-radius: 5px;
+
+            &:hover {
+                border: 1px solid red;
+
+            }
+
+            transition: 2s;
+            -webkit-transition: 2s;
+            -moz-transition: 2s;
+            -ms-transition: 2s;
+            -o-transition: 2s;
+        }
+
+        .swal2-confirm {
+            color: var(--blue-color);
+            background-color: #488aec13;
+            border: 1px solid transparent;
+            padding: 6px 15px;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -ms-border-radius: 5px;
+            -o-border-radius: 5px;
+
+            &:hover {
+                border: 1px solid var(--blue-color);
+            }
+
+            transition: 2s;
+            -webkit-transition: 2s;
+            -moz-transition: 2s;
+            -ms-transition: 2s;
+            -o-transition: 2s;
+        }
+    }
 }
 
 button {
@@ -433,39 +506,74 @@ button {
     }
 }
 
+
+
 .primary {
     color: var(--blue-color);
     background-color: #488aec13;
+    border: 1px solid transparent;
     padding: 6px 15px;
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
+
+    &:hover {
+        border: 1px solid var(--blue-color);
+    }
+
+    transition: 2s;
+    -webkit-transition: 2s;
+    -moz-transition: 2s;
+    -ms-transition: 2s;
+    -o-transition: 2s;
 }
 
 .danger {
     color: red;
     padding: 6px 15px;
+    border: 1px solid transparent;
     background-color: rgba(255, 0, 0, 0.178);
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
+
+    &:hover {
+        border: 1px solid red;
+
+    }
+
+    transition: 2s;
+    -webkit-transition: 2s;
+    -moz-transition: 2s;
+    -ms-transition: 2s;
+    -o-transition: 2s;
 }
 
 .secondary {
     color: rgb(141, 57, 250);
     padding: 6px 15px;
     background-color: rgba(141, 57, 250, 0.178);
+    border: 1px solid transparent;
+
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
 
+    &:hover {
+        border: 1px solid rgb(141, 57, 250);
+    }
 
+    transition: 2s;
+    -webkit-transition: 2s;
+    -moz-transition: 2s;
+    -ms-transition: 2s;
+    -o-transition: 2s;
 }
 
 .secondary,
@@ -931,16 +1039,17 @@ body {
         width: 100%;
         padding: 8px 15px;
         text-align: start;
-        color: var(--text-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 5px;
+        color: var(--text-color);
 
         svg {
             rotate: 0deg;
         }
     }
+
 
 
 
@@ -951,7 +1060,40 @@ body {
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
+    border: 1px solid var(--border-color);
+
     overflow: hidden;
+}
+
+.menu-holder.actions {
+    border: 1px solid red;
+}
+
+.dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    background-color: rgb(39, 0, 212);
+    animation: dot-animation 2s 2s infinite;
+    -webkit-animation: dot-animation 1s infinite;
+}
+
+@keyframes dot-animation {
+    0% {
+        box-shadow: 0px 0px 9px 4px rgb(1, 25, 90), 0px 0px 6px 1px rgb(51 1 150), 0px 0px 3px 2px rgb(1, 19, 68);
+    }
+
+    50% {
+        box-shadow: 0px 0px 9px 6px rgb(1, 25, 90), 0px 0px 6px 3px rgb(51 1 150), 0px 0px 3px 4px rgb(1, 19, 68);
+    }
+
+    100% {
+        box-shadow: 0px 0px 9px 4px rgb(1, 25, 90), 0px 0px 6px 1px rgb(51 1 150), 0px 0px 3px 2px rgb(1, 19, 68);
+    }
 }
 
 .submenu {
@@ -973,7 +1115,7 @@ body {
 
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 20px;
         padding: 10px 15px;
         border: none;
         transition: background-color 0.3s ease,
@@ -1052,8 +1194,10 @@ body {
 
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         align-items: center;
         padding: 10px 0;
+        gap: 10px;
         border-bottom: 1px solid var(--dashboard-sec-color);
     }
 
@@ -1255,6 +1399,7 @@ body {
     align-items: center;
     z-index: 2000;
     box-shadow: 0px 2px 9px black;
+    border: 2px solid var(--border-color);
 
     .light-dark-mode {
         color: var(--text-color);
@@ -1393,6 +1538,7 @@ body {
     overflow-y: auto;
     padding-top: 10px;
     padding-bottom: 10px;
+    border: 2px solid var(--border-color);
 
     &::-webkit-scrollbar {
         height: 4px;
@@ -1474,6 +1620,7 @@ body {
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
     padding: 20px;
+    border: 2px solid var(--border-color);
 
     h1 {
         color: var(--text-color);
@@ -1539,7 +1686,7 @@ body {
 table {
     width: 100%;
     color: var(--text-color);
-    background-color: rgb(0, 22, 54);
+    background-color: var(--dashboard-main-color);
 }
 
 
@@ -1627,7 +1774,7 @@ tr {
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
-    background-color: rgb(0, 22, 54);
+    background-color: var(--dashboard-main-color);
 
     &::-webkit-scrollbar {
         height: 4px;
@@ -1658,8 +1805,8 @@ tr {
 .pagination {
     display: flex;
     justify-content: center;
-    gap: 10px;
     padding: 10px;
+    gap: 5px;
     color: var(--text-color);
 
     button {
@@ -1669,12 +1816,20 @@ tr {
         display: flex;
         justify-content: center;
         align-items: center;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
+        border: 1px solid var(--border-color);
     }
 
     span {
         display: flex;
         justify-content: center;
         align-items: center;
+
+
     }
 }
 
@@ -1834,7 +1989,7 @@ tr {
     .profile-title {
         color: var(--text-color);
         font-size: 30px;
-        border-bottom: 1px solid var(--text-color);
+        border-bottom: 2px solid var(--border-color);
         border-radius: 10px;
         -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
@@ -2035,15 +2190,162 @@ tr {
         align-items: center;
     }
 
-    .message {
+    .title {
         background-color: var(--dashboard-main-color);
-        padding: 10px;
+        box-shadow: 0px 2px 9px black;
+    }
+
+    .chat-container {
+        height: 75vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+
+
+    .messages {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 10px;
+
+        &::-webkit-scrollbar {
+            width: 10px;
+
+
+        }
+
+        &::-webkit-scrollbar-track {
+
+
+            &:hover {
+                width: 12px;
+            }
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(155, 155, 155, 0.5);
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        }
+
+    }
+
+    .message-holder {
+
+
+
+        margin-bottom: 10px;
+        width: 100%;
+        display: flex;
+        gap: 10px;
+
+        .user-image {
+            align-self: end;
+        }
+
+        .message {
+
+
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            div {
+                background-color: var(--dashboard-main-color);
+                padding: 10px;
+                color: var(--text-color);
+                min-width: 150px;
+                border-radius: 10px;
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                -ms-border-radius: 10px;
+                -o-border-radius: 10px;
+
+            }
+        }
+
+
+    }
+}
+
+.message-holder.reciever {
+    direction: rtl;
+
+    .message {
+        div {
+            direction: ltr;
+        }
+    }
+}
+
+
+/* Products */
+
+.product-images {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    &>button {
+        padding: 20px;
         border-radius: 10px;
         -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
         -ms-border-radius: 10px;
         -o-border-radius: 10px;
-        color: var(--text-color);
-        margin-bottom: 20px;
+
+        border: 2px dashed var(--dashboard-sec-color);
+        position: relative;
+
+        svg {
+            color: var(--dashboard-sec-color);
+        }
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: inherit;
+            -webkit-border-radius: inherit;
+            -moz-border-radius: inherit;
+            -ms-border-radius: inherit;
+            -o-border-radius: inherit;
+            object-fit: contain;
+        }
+
+        button {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+        }
+    }
+
+}
+
+.product-page {
+    .data-body {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+/* Admins */
+
+.admins-table {
+    img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
     }
 }

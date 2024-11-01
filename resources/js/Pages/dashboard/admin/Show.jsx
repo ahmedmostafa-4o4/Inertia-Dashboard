@@ -5,22 +5,25 @@ import {
     faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Head, router } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import Notify from "../Notify";
 
 export default function Show({ auth, admin, status }) {
+    const { data } = admin;
+    console.log(admin);
+
     return (
         <div className="profile">
             <Main header={"Profile"} auth={auth}>
                 <Head title="Profile" />
                 <div className="title">
-                    <h1>{admin.name}'s Profile</h1>
+                    <h1>{data.name}'s Profile</h1>
                     <div className="actions">
                         <button
                             className="secondary"
                             onClick={() =>
                                 router.get(route("notification.create"), {
-                                    ids: [admin.id],
+                                    ids: [data.id],
                                 })
                             }
                         >
@@ -30,7 +33,7 @@ export default function Show({ auth, admin, status }) {
                         <button
                             className="primary"
                             onClick={() =>
-                                router.get(route("admins.edit", admin.id))
+                                router.get(route("admins.edit", data.id))
                             }
                         >
                             {" "}
@@ -40,7 +43,7 @@ export default function Show({ auth, admin, status }) {
                         <button
                             className="danger"
                             onClick={() =>
-                                router.delete(route("admins.destroy", admin.id))
+                                router.delete(route("admins.destroy", data.id))
                             }
                         >
                             {" "}
@@ -52,44 +55,76 @@ export default function Show({ auth, admin, status }) {
 
                 <div className="data-body">
                     <div className="image">
-                        <img src={`/storage/${admin.image_path}`} alt="" />
+                        <img src={`/storage/${data.image_path}`} alt="" />
                     </div>
                     <div className="detailes">
                         <div className="name">
-                            <p>{admin.name}</p>
+                            <p>{data.name}</p>
                         </div>
                         <div className="email">
                             <p>Email Address: </p>
-                            <p>{admin.email}</p>
+                            <p>{data.email}</p>
                         </div>
                         <div className="phone-number">
                             <p>Phone Number: </p>
-                            <p>{admin.phone_number}</p>
+                            <p>{data.phone_number}</p>
                         </div>
                         <div className="role">
                             <p>Role: </p>
-                            <p>{admin.role}</p>
+                            <p>{data.role}</p>
                         </div>
                         <div className="created_at">
                             <p>Created at: </p>
-                            <p>{admin.created_at}</p>
+                            <p>{data.created_at}</p>
                         </div>
                         <div className="updated_at">
                             <p>Updated at: </p>
-                            <p>{admin.updated_at}</p>
+                            <p>{data.updated_at}</p>
                         </div>
-                        <div className="created_by">
-                            <p>Created by: </p>
-                            <p>Mohammed Ahmed</p>
-                        </div>
+                        <p className="created-by ">
+                            <h4>Created by:</h4>
+
+                            <Link
+                                className="underline"
+                                href={
+                                    data.created_by.id
+                                        ? route(
+                                              "admins.show",
+                                              data.created_by.id
+                                          )
+                                        : data.created_by
+                                }
+                            >
+                                {data.created_by.name
+                                    ? data.created_by.name
+                                    : data.created_by}
+                            </Link>
+                        </p>
                         <div className="updated_by">
-                            <p>Updated by: </p>
-                            <p>Khaled Ali</p>
+                            <p className="updated_by ">
+                                <h4>Updated by:</h4>
+
+                                <Link
+                                    className="underline"
+                                    href={
+                                        data.updated_by.id
+                                            ? route(
+                                                  "admins.show",
+                                                  data.updated_by.id
+                                              )
+                                            : data.updated_by
+                                    }
+                                >
+                                    {data.updated_by.name
+                                        ? data.updated_by.name
+                                        : data.updated_by}{" "}
+                                </Link>
+                            </p>
                         </div>
                     </div>
                 </div>
             </Main>
-            {status ? <Notify message={status} /> : null}
+            {status.success ? <Notify message={status.success} /> : null}
         </div>
     );
 }

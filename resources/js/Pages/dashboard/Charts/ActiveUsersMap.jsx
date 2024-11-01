@@ -56,10 +56,10 @@ const DisableScrollOnMobile = () => {
     return null;
 };
 
-const ActiveUsersMap = ({ latitude, longitude }) => {
+const ActiveUsersMap = ({ locations }) => {
     return (
         <MapContainer
-            center={[20, 0]}
+            center={[0, 0]}
             zoom={2}
             style={{ height: "300px", width: "100%", borderRadius: "12px" }}
             touchZoom="center"
@@ -73,15 +73,21 @@ const ActiveUsersMap = ({ latitude, longitude }) => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             />
 
-            {userLocations.map((user) => (
-                <Marker key={user.id} position={user.position}>
-                    <Popup>
-                        <b>{user.name}</b>
-                        <br />
-                        Active now.
-                    </Popup>
-                </Marker>
-            ))}
+            {locations.map(
+                (user) =>
+                    user.position && (
+                        <Marker
+                            key={user.id}
+                            position={[user.position.lat, user.position.lng]}
+                        >
+                            <Popup>
+                                <b>{user.name}</b>
+                                <br />
+                                Active now.
+                            </Popup>
+                        </Marker>
+                    )
+            )}
             {/* <Marker position={[latitude, longitude]}>
                 <Popup>
                     <b>Google</b>

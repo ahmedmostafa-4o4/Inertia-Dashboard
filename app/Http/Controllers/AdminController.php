@@ -6,7 +6,7 @@ use App\Models\Admin;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Http\Resources\AdminResource;
-use App\Notifications\UserNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +21,7 @@ class AdminController extends Controller
      */
     public function index()
     {
+
         $admins = Admin::with(['creator', 'updator'])->orderByDesc('id')->get();
 
         return Inertia::render(
@@ -66,8 +67,7 @@ class AdminController extends Controller
      */
     public function show(Admin $admin)
     {
-        $imageUrl = $admin->image_path;
-        return Inertia::render('dashboard/admin/Show', ["admin" => $admin, 'imageUrl' => asset('storage/' . $imageUrl), "status" => session('success')]);
+        return Inertia::render('dashboard/admin/Show', ["admin" => new AdminResource($admin)]);
     }
 
     /**
