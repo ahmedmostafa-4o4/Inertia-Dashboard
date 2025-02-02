@@ -30,6 +30,9 @@ export default function ActiveUsers() {
         });
     };
 
+    const truncateString = (str, maxLength) =>
+        str.length > maxLength ? str.slice(0, maxLength) + "..." : str;
+
     useEffect(() => {
         // Fetch users' activity on component mount
         fetchUsersActivity();
@@ -96,7 +99,12 @@ export default function ActiveUsers() {
                                                 >
                                                     {user.name}
                                                 </h5>
-                                                <p>{user.email}</p>
+                                                <p>
+                                                    {truncateString(
+                                                        user.email,
+                                                        20
+                                                    )}
+                                                </p>
                                             </div>
                                             <button
                                                 onClick={(e) => {
@@ -166,7 +174,10 @@ export default function ActiveUsers() {
                                         />
                                         <div className="detailes ">
                                             <h5>{user.name}</h5>
-                                            <p>{user.email}</p>
+                                            <p>
+                                                {" "}
+                                                {truncateString(user.email, 20)}
+                                            </p>
                                         </div>
                                         <button
                                             onClick={(e) => {

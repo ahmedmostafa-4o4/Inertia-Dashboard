@@ -4,7 +4,7 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "start": "bash install.sh && php artisan serve --host 0.0.0.0 --port 3000"
+        "start": "php artisan serve"
     },
     "devDependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.5.2",
@@ -38,9 +38,11 @@
         "@emotion/styled": "^11.10.6",
         "@inertiajs/react": "^1.2.0",
         "@mui/icons-material": "^6.1.2",
+        "@mui/material": "^6.1.8",
         "@mui/x-charts": "^7.19.0",
         "animate.css": "^4.1.1",
         "datatables.net-dt": "^2.1.8",
-        "dayjs": "^1.11.13"
+        "dayjs": "^1.11.13",
+        "react-color": "^2.19.3"
     }
 }

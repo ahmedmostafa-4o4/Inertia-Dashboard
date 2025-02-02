@@ -16,9 +16,12 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         $images = json_decode($this->images);
+        $options = json_decode($this->options);
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'colors' => $options->colors ?? "",
+            'sizes' => $options->sizes ?? "",
             'image1' => $images->image1,
             'image2' => $images->image2,
             'image3' => $images->image3,

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Main from "../../Main";
 import { Head, Link, router } from "@inertiajs/react";
 import Notify from "../Notify";
 import axios from "axios";
@@ -61,7 +60,7 @@ export default function Notifications({ auth, notifications, status }) {
 
     return (
         <div className="notifications">
-            <Main auth={auth} header={"Notifications"}>
+            <>
                 <Head title="Notifications" />
                 <div className="title"></div>
                 <div className="notifications-holder">
@@ -134,8 +133,9 @@ export default function Notifications({ auth, notifications, status }) {
                         <p>There is no messages </p>
                     )}
                 </div>
-            </Main>
+            </>
             {status.success ? <Notify message={status.success} /> : null}
         </div>
     );
 }
+Notifications.header = "Notifications";

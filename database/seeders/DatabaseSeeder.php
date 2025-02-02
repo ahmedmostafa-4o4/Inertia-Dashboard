@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
-use App\Models\User;
+use App\Models\Category;
+use App\Models\Product;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Admin::factory(100)->create();
+        // Category::factory(10)->create();
+        Product::factory(100)->create();
 
         // Admin::factory()->create([
         //     'name' => "Ahmed Mostafa",

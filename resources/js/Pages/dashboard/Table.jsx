@@ -113,7 +113,6 @@ const Table = ({
             setSelectedRows([]);
         }
     };
-    console.log(data);
 
     return (
         <>

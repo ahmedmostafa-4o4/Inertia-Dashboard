@@ -33,6 +33,8 @@ class UpdateProductRequest extends FormRequest
             'images.image2' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'images.image3' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'images.image4' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'options.colors' => ['nullable'],
+            'options.sizes' => ['nullable'],
             'category_id' => [
                 'required',
                 Rule::in(Category::pluck('id')->toArray()) // Ensures the category exists

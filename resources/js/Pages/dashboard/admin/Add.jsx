@@ -1,6 +1,5 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import Main from "@/Pages/Main";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Head, router, useForm } from "@inertiajs/react";
@@ -25,7 +24,7 @@ function AddAdmin({ auth }) {
     };
 
     return (
-        <Main header="Admins" auth={auth}>
+        <>
             <Head title="Add Admin" />
             <div className="dashboard-form">
                 <form onSubmit={handleForm} className="input-style">
@@ -165,8 +164,10 @@ function AddAdmin({ auth }) {
                     </div>
                 </form>
             </div>
-        </Main>
+        </>
     );
 }
+
+AddAdmin.header = "Admins";
 
 export default AddAdmin;

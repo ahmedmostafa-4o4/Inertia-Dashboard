@@ -1,11 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, router } from "@inertiajs/react";
 import {
-    faUser,
-    faBell,
     faAngleRight,
     faRightFromBracket,
-    faGears,
 } from "@fortawesome/free-solid-svg-icons";
 function Sidebar({ auth }) {
     const handleMenu = (btn) => {
@@ -49,26 +46,48 @@ function Sidebar({ auth }) {
                     </button>
                 </div>
                 {auth.user.role === "owner" ? (
-                    <div className="menu-holder">
-                        <button
-                            className="menu-item"
-                            onClick={(btn) => handleMenu(btn.currentTarget)}
-                        >
-                            Admins
-                            <FontAwesomeIcon icon={faAngleRight} />
-                        </button>
-                        <div className="submenu">
-                            <Link href={route("admins.index")}>
-                                <span className="dot"></span>
-                                <p>Admins List</p>
-                            </Link>
-                            <Link href={route("admins.create")}>
-                                <span className="dot"></span>
+                    <>
+                        <div className="menu-holder">
+                            <button
+                                className="menu-item"
+                                onClick={(btn) => handleMenu(btn.currentTarget)}
+                            >
+                                Admins
+                                <FontAwesomeIcon icon={faAngleRight} />
+                            </button>
+                            <div className="submenu">
+                                <Link href={route("admins.index")}>
+                                    <span className="dot"></span>
+                                    <p>Admins List</p>
+                                </Link>
+                                <Link href={route("admins.create")}>
+                                    <span className="dot"></span>
 
-                                <p>New Admin</p>
-                            </Link>
+                                    <p>New Admin</p>
+                                </Link>
+                            </div>
                         </div>
-                    </div>
+                        <div className="menu-holder">
+                            <button
+                                className="menu-item"
+                                onClick={(btn) => handleMenu(btn.currentTarget)}
+                            >
+                                Users
+                                <FontAwesomeIcon icon={faAngleRight} />
+                            </button>
+                            <div className="submenu">
+                                <Link href={route("users.index")}>
+                                    <span className="dot"></span>
+                                    <p>Users List</p>
+                                </Link>
+                                <Link href={route("users.create")}>
+                                    <span className="dot"></span>
+
+                                    <p>New User</p>
+                                </Link>
+                            </div>
+                        </div>
+                    </>
                 ) : null}
                 <div className="menu-holder">
                     <button

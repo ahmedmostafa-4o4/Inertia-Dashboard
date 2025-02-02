@@ -1,4 +1,3 @@
-import Main from "@/Pages/Main";
 
 import { router, useForm } from "@inertiajs/react";
 
@@ -13,7 +12,7 @@ export default function SendNotification({ auth, users }) {
     };
 
     return (
-        <Main header="Notifications" auth={auth}>
+        <>
             <div className="dashboard-form">
                 <h1>Send Notification</h1>
                 <form onSubmit={handleForm} className="input-style">
@@ -40,6 +39,7 @@ export default function SendNotification({ auth, users }) {
                     </div>
                 </form>
             </div>
-        </Main>
+        </>
     );
 }
+SendNotification.header = "Send Notification";

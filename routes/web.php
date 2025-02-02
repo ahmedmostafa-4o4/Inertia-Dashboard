@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Models\Admin;
 use App\Models\UserRequest;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,9 @@ Route::middleware('auth:admin')->group(function () {
 
         Route::resource('categories', CategoryController::class)->middleware('role');
         Route::post('categories/destory', [CategoryController::class, 'destroyMultiple'])->name('categories.destroyMultiple');
+
+        Route::resource('users', UserController::class)->middleware('role');
+        Route::post('users/destory', [UserController::class, 'deleteMultiple'])->name('users.deleteMultiple');
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile');
 

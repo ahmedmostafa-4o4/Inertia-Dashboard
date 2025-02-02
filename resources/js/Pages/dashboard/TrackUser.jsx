@@ -1,9 +1,8 @@
 import { Head, router } from "@inertiajs/react";
-import Main from "../Main";
 import Table from "./Table";
 import { useMemo } from "react";
 
-export default function TrackUser({ auth, userRequests }) {
+export default function TrackUser({ userRequests }) {
     const data = userRequests;
 
     const columns = useMemo(
@@ -18,7 +17,7 @@ export default function TrackUser({ auth, userRequests }) {
     );
 
     return (
-        <Main header={"Track User Activity"} auth={auth}>
+        <>
             <Head title="Track User Activity" />
 
             <Table
@@ -33,6 +32,7 @@ export default function TrackUser({ auth, userRequests }) {
                         }),
                 }}
             />
-        </Main>
+        </>
     );
 }
+TrackUser.header = "Track User Activity";

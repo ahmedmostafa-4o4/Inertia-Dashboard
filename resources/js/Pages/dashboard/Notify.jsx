@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Notify({ title, message, onClose }) {
+export default function Notify({  message}) {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {

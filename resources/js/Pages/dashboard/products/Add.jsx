@@ -1,18 +1,27 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import Main from "@/Pages/Main";
 import { faImage, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { router, useForm } from "@inertiajs/react";
-import { useRef } from "react";
+import {  Box, Button, Chip, TextField } from "@mui/material";
+import { useRef, useState } from "react";
+import { SketchPicker } from "react-color";
 
-function AddProduct({ auth, categories }) {
+
+
+function AddProduct({ categories }) {
+    const [currentColor, setCurrentColor] = useState('#000000'); // Default black
+    const [colorList, setColorList] = useState([]);
+    const [isOpen , setIsOpen] = useState(false);
+    const [selectedSizes, setSelectedSizes] = useState([]);
+    const [customSize, setCustomSize] = useState('');
     const { data, setData, post, errors } = useForm({
         title: "",
         description: "",
         price: "",
         stock: "",
         offer: "",
+        options:{colors:[], sizes: []},
         images: { image1: "", image2: "", image3: "", image4: "" },
         category_id: "",
     });
@@ -26,13 +35,41 @@ function AddProduct({ auth, categories }) {
     const formImage4 = useRef();
     const handleForm = (e) => {
         e.preventDefault();
-        console.log(data);
         post(route("products.store"));
-        console.log(errors);
     };
 
+   
+  
+    const addColor = () => {
+      if (!colorList.includes(currentColor)) {
+        setColorList([...colorList, currentColor]);
+      }
+    };
+  
+    const removeColor = (color) => {
+      setColorList(colorList.filter((c) => c !== color));
+
+    };
+
+   
+  
+    const addSize = (size) => {
+      if (size && !selectedSizes.includes(size)) {
+        setSelectedSizes([...selectedSizes, size]);
+
+      }
+      setCustomSize(''); // Reset custom size input
+
+    };
+  
+    const removeSize = (size) => {
+      setSelectedSizes(selectedSizes.filter((s) => s !== size));
+    };
+  
+  
+
     return (
-        <Main header="Add Product" auth={auth}>
+        <>
             <div className="dashboard-form">
                 <form onSubmit={handleForm} className="input-style">
                     <InputLabel value={"Product Title"} />
@@ -282,9 +319,76 @@ function AddProduct({ auth, categories }) {
                         ))}
                     </select>
                     <InputError message={errors.category_id} />
+                    {!isOpen && <Button variant="contained" onClick={() => {setIsOpen(true)}} style={{ margin: '10px 0' }}>
+        Add Color
+      </Button>}
+                    
+      {isOpen && <> <div className="flex justify-between flex-wrap gap-2">
+      <SketchPicker
+        color={currentColor}
+        onChangeComplete={(color) => setCurrentColor(color.hex)}
+        className="min-w-52"
+      />
+      <div className="flex-1 min-w-52">
+        {colorList.map((color, index) => (
+          <Chip
+            key={index}
+            label={color}
+            style={{ backgroundColor: color, color: '#fff', margin: '5px' }}
+            onDelete={() => removeColor(color)}
+          />
+        ))}
+        
+      </div>
+     
+      
+    </div>  <Button variant="contained" onClick={addColor} style={{ margin: '10px 0' }}>
+        Add Color
+      </Button></>}
 
+      <Box>
+
+      {/* Manual Input for Custom Sizes */}
+      <div className="flex gap-2 flex-wrap">
+      <TextField
+        value={customSize}
+        onChange={(e) => setCustomSize(e.target.value)}
+        onKeyDown={(e) => { 
+          if (e.key === 'Enter') {
+            addSize(customSize);
+            e.preventDefault();
+          }
+        }}
+        style={{ marginBottom: '10px' }}
+        placeholder="Custom Size"
+        className="flex-1"
+      />
+
+      <Button
+        variant="contained"
+        onClick={() => addSize(customSize)}
+        style={{ marginBottom: '10px' }}
+      >
+        Add Custom Size
+      </Button>
+</div>
+      {/* Display Selected Sizes */}
+      <Box>
+        {selectedSizes.map((size, index) => (
+          <Chip
+            key={index}
+            label={size}
+            onDelete={() => removeSize(size)}
+            style={{ margin: '5px' , color:"#ccc"}}
+          />
+        ))}
+      </Box>
+
+     
+    </Box>
+                    
                     <div className="flex justify-center align-middle gap-2">
-                        <button className="primary flex-1">Add</button>
+                        <button className="primary flex-1" onClick={() => {setData('options', {colors: colorList, sizes: selectedSizes})}}>Add</button>
                         <button
                             className="danger"
                             onClick={() => router.get(route("products.index"))}
@@ -294,8 +398,9 @@ function AddProduct({ auth, categories }) {
                     </div>
                 </form>
             </div>
-        </Main>
+        </>
     );
 }
+AddProduct.header = "Add Product";
 
 export default AddProduct;

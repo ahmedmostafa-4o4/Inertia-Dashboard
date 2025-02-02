@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -94,5 +96,20 @@ class CategoryController extends Controller
         }
 
         return to_route('categories.index')->with('success', 'Categories Was Deleted');
+    }
+
+    public function apiIndex()
+    {
+        $categories = Category::get(['title', 'id']);
+
+        return response()->json(['categories' => $categories]);
+    }
+
+    public function getRelatedProducts(Category $category)
+    {
+
+        $products = ProductResource::collection(Product::select()->where('category_id', $category->id)->orderBy('id')->get());
+
+        return response()->json(['products' =>  $products]);
     }
 }

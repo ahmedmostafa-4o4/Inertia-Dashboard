@@ -1,9 +1,8 @@
-import Main from "@/Pages/Main";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Head, Link } from "@inertiajs/react";
+import { Head} from "@inertiajs/react";
 
-export default function List({ auth }) {
+export default function List() {
     const handleMenu = (btn) => {
         const submenu = btn.nextElementSibling;
         // Toggle the active class on the clicked menu item
@@ -20,7 +19,7 @@ export default function List({ auth }) {
         }
     };
     return (
-        <Main header="Orders" auth={auth}>
+        <>
             <Head title="Orders" />
             <input
                 type="search"
@@ -315,6 +314,7 @@ export default function List({ auth }) {
                     </div>
                 </div>
             </div>
-        </Main>
+        </>
     );
 }
+List.header = "Orders";

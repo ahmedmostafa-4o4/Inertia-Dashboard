@@ -22,7 +22,7 @@ export default function Login({ status, canResetPassword }) {
     };
 
     return (
-        <GuestLayout>
+        <>
             <Head title="Log in" />
 
             {status && (
@@ -101,6 +101,7 @@ export default function Login({ status, canResetPassword }) {
             >
                 Do not have an account? Create one
             </Link>
-        </GuestLayout>
+        </>
     );
 }
+Login.layout = (page) => <GuestLayout>{page}</GuestLayout>;

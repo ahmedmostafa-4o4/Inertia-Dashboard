@@ -1,7 +1,7 @@
 import Main from "@/Pages/Main";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Head, Link } from "@inertiajs/react";
+import { Head} from "@inertiajs/react";
 
 export default function List({ auth }) {
     const handleMenu = (btn) => {

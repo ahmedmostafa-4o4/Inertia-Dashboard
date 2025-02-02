@@ -4,23 +4,35 @@ import "animate.css";
 
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
-import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+import Main from "./Pages/Main";
 
-const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+const appName = "Dashboard";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) =>
-        resolvePageComponent(
-            `./Pages/${name}.jsx`,
-            import.meta.glob("./Pages/**/*.jsx")
-        ),
+    resolve: (name) => {
+        const pages = import.meta.glob("./Pages/**/*.jsx", { eager: true });
+        let page = pages[`./Pages/${name}.jsx`];
+
+        // Set Main as default layout for pages without specific layouts
+        const layoutTitle = page.default.header || appName;
+        page.default.layout =
+            page.default.layout ||
+            ((page) => (
+                <Main
+                    children={page}
+                    auth={page.props.auth}
+                    header={layoutTitle}
+                />
+            ));
+
+        return page;
+    },
     setup({ el, App, props }) {
         const root = createRoot(el);
-
         root.render(<App {...props} />);
     },
     progress: {
-        color: "#4B5563",
+        color: "rgba(15, 157, 252)",
     },
 });

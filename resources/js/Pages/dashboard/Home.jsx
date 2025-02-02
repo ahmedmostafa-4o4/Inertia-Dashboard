@@ -5,13 +5,10 @@ import Table from "./Table";
 import React from "react";
 import ActiveUsersMap from "./Charts/ActiveUsersMap";
 import PieChartWithCenterLabel from "./Charts/PieChart";
-
-import Main from "../Main";
 import { Head } from "@inertiajs/react";
 import LineChart from "./Charts/LineChart";
 
-function Home({ auth, unreadNotificationsCount, locations }) {
-    console.log(locations);
+function Home({ locations }) {
     const data = React.useMemo(
         () => [
             { name: "John", age: 28, status: "Active" },
@@ -44,11 +41,7 @@ function Home({ auth, unreadNotificationsCount, locations }) {
     );
 
     return (
-        <Main
-            header={"Home"}
-            auth={auth}
-            unreadNotificationsCount={unreadNotificationsCount}
-        >
+        <>
             <Head title="Home" />
             <div className="dashboard-home">
                 <div className="totals animate__animated animate__fadeInUp">
@@ -122,8 +115,9 @@ function Home({ auth, unreadNotificationsCount, locations }) {
                     </div>
                 </div>
             </div>
-        </Main>
+        </>
     );
 }
+Home.header = "Home";
 
 export default Home;

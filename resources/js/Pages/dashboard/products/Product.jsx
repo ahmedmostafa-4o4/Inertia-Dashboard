@@ -1,13 +1,11 @@
-import Main from "@/Pages/Main";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Head, Link } from "@inertiajs/react";
 import Table from "../Table";
 import React from "react";
 
-export default function Product({ auth, product }) {
+export default function Product({ product }) {
     const { data } = product;
-    console.log(data);
     const _data = React.useMemo(
         () => [
             { name: "John", age: 28, status: "Active" },
@@ -40,7 +38,7 @@ export default function Product({ auth, product }) {
     );
 
     return (
-        <Main header={"Product"} auth={auth}>
+        <>
             <Head title="Product" />
             <div className="product-page">
                 <div className="title">
@@ -53,7 +51,7 @@ export default function Product({ auth, product }) {
 
                 <div className="data-body">
                     <div className="image">
-                        <img src={`/storage/${data.image1}`} alt="" />
+                        <img src={`${data.image1}`} alt="" />
                     </div>
 
                     <div className="detailes">
@@ -121,6 +119,7 @@ export default function Product({ auth, product }) {
             </div>
             <Table data={_data} columns={columns} title={"Ordered By"} />
             <Table data={_data} columns={columns} title={"Returned By"} />
-        </Main>
+        </>
     );
 }
+Product.header = "Product";

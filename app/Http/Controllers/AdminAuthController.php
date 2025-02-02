@@ -26,7 +26,7 @@ class AdminAuthController extends Controller
         if (Auth::guard('admin')->attempt($credentials)) {
             // Authentication passed
             $request->session()->regenerate();  // Regenerate session to prevent fixation attacks
-            return to_route('home');
+            return to_route('admins.index');
         }
 
         // Authentication failed

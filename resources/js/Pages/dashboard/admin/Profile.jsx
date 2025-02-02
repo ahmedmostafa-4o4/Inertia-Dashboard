@@ -1,7 +1,6 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
-import Main from "@/Pages/Main";
 import {
     faBell,
     faCameraRetro,
@@ -64,7 +63,7 @@ export default function Profile({ auth, status }) {
     };
     return (
         <div className="my-profile">
-            <Main header={"Profile"} auth={auth}>
+            <>
                 <Head title="Profile" />
                 <div className="title">
                     <h1>{auth.user.name}'s Profile</h1>
@@ -343,8 +342,9 @@ export default function Profile({ auth, status }) {
                         </form>
                     )}
                 </div>
-            </Main>
+            </>
             {status ? <Notify message={status} /> : null}
         </div>
     );
 }
+Profile.header = "Profile";

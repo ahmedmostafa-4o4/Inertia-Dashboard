@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Main from "../../Main";
 import { Head, Link } from "@inertiajs/react";
 import {
     faCheck,
@@ -78,7 +77,7 @@ export default function ShowNotification({
 
     return (
         <div className="notification-page">
-            <Main auth={auth} header={"Notifications"}>
+            <>
                 <Head title="Notifications" />
                 <div className="title">
                     <h1>
@@ -198,7 +197,8 @@ export default function ShowNotification({
                         </button>
                     </form>
                 </div>
-            </Main>
+            </>
         </div>
     );
 }
+ShowNotification.header = "Notifications";

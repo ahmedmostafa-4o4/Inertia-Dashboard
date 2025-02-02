@@ -1,24 +1,30 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import Main from "@/Pages/Main";
 import { faImage, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { router, useForm } from "@inertiajs/react";
-import { useRef } from "react";
+import { Box, Button, Chip, TextField } from "@mui/material";
+import { useRef, useState } from "react";
+import { SketchPicker } from "react-color";
 
-function EditProduct({ auth, categories, product }) {
+function EditProduct({ categories, product }) {
+    const {colors, sizes} = JSON.parse(product.options);
+    const [currentColor, setCurrentColor] = useState('#000000'); // Default black
+    const [colorList, setColorList] = useState(colors);
+    const [selectedSizes, setSelectedSizes] = useState(sizes);
+    const [customSize, setCustomSize] = useState('');
     const { data, setData, post, errors } = useForm({
         title: product.title || "",
         description: product.description || "",
         price: product.price || "",
         stock: product.stock || "",
         offer: product.offer || "",
+        options:{colors, sizes},
         images: { image1: "", image2: "", image3: "", image4: "" },
         category_id: product.category_id || "",
         _method: "PUT",
     });
     const images = JSON.parse(product.images);
-
     const image1Ref = useRef();
     const image2Ref = useRef();
     const image3Ref = useRef();
@@ -32,8 +38,37 @@ function EditProduct({ auth, categories, product }) {
         post(route("products.update", product.id));
     };
 
+       
+  
+    const addColor = () => {
+        if (!colorList.includes(currentColor)) {
+          setColorList([...colorList, currentColor]);
+        }
+      };
+    
+      const removeColor = (color) => {
+        setColorList(colorList.filter((c) => c !== color));
+  
+      };
+  
+     
+    
+      const addSize = (size) => {
+        if (size && !selectedSizes.includes(size)) {
+          setSelectedSizes([...selectedSizes, size]);
+  
+        }
+        setCustomSize(''); // Reset custom size input
+  
+      };
+    
+      const removeSize = (size) => {
+        setSelectedSizes(selectedSizes.filter((s) => s !== size));
+      };
+    
+
     return (
-        <Main header="Edit Product" auth={auth}>
+        <>
             <div className="dashboard-form">
                 <form onSubmit={handleForm} className="input-style">
                     <InputLabel value={"Product Title"} />
@@ -322,8 +357,74 @@ function EditProduct({ auth, categories, product }) {
                     </select>
                     <InputError message={errors.category_id} />
 
+                    
+                    
+      <div className="flex justify-between flex-wrap gap-2">
+      <SketchPicker
+        color={currentColor}
+        onChangeComplete={(color) => setCurrentColor(color.hex)}
+        className="min-w-52"
+      />
+      <div className="flex-1 min-w-52">
+        {colorList.map((color, index) => (
+          <Chip
+            key={index}
+            label={color}
+            style={{ backgroundColor: color, color: '#fff', margin: '5px' }}
+            onDelete={() => removeColor(color)}
+          />
+        ))}
+        
+      </div>
+     
+      
+    </div>  <Button variant="contained" onClick={addColor} style={{ margin: '10px 0' }}>
+        Add Color
+      </Button>
+
+      <Box>
+
+      {/* Manual Input for Custom Sizes */}
+      <div className="flex gap-2 flex-wrap">
+      <TextField
+        value={customSize}
+        onChange={(e) => setCustomSize(e.target.value)}
+        onKeyDown={(e) => { 
+          if (e.key === 'Enter') {
+            addSize(customSize);
+            e.preventDefault();
+          }
+        }}
+        style={{ marginBottom: '10px' }}
+        placeholder="Custom Size"
+        className="flex-1"
+      />
+
+      <Button
+        variant="contained"
+        onClick={() => addSize(customSize)}
+        style={{ marginBottom: '10px' }}
+      >
+        Add Custom Size
+      </Button>
+</div>
+      {/* Display Selected Sizes */}
+      <Box>
+        {selectedSizes.map((size, index) => (
+          <Chip
+            key={index}
+            label={size}
+            onDelete={() => removeSize(size)}
+            style={{ margin: '5px' , color:"#ccc"}}
+          />
+        ))}
+      </Box>
+
+     
+    </Box>
+
                     <div className="flex justify-center align-middle gap-2">
-                        <button className="primary flex-1">Edit</button>
+                        <button className="primary flex-1" onClick={() => {setData('options', {colors: colorList, sizes: selectedSizes})}}>Edit</button>
                         <button
                             className="danger"
                             onClick={() => router.get(route("products.index"))}
@@ -333,8 +434,10 @@ function EditProduct({ auth, categories, product }) {
                     </div>
                 </form>
             </div>
-        </Main>
+        </>
     );
 }
+
+EditProduct.header = "Edit Product";
 
 export default EditProduct;

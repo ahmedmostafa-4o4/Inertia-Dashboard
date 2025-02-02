@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_id')->constrained()->onDelete('cascade');
+            $table->foreignId('admin_id')->constrained();
             $table->string('endpoint');
             $table->string('method');  // HTTP method
             $table->text('payload')->nullable();  // Request data (if applicable)

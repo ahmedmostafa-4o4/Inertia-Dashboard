@@ -62,6 +62,7 @@ class ProductController extends Controller
         }
 
         $fields['images'] = json_encode($fields['images']);
+        $fields['options'] = json_encode($fields['options']);
 
         Product::create($fields);
 
@@ -113,7 +114,7 @@ class ProductController extends Controller
                 $fields['images'][$key] = json_decode($product->images)->$key ?? null;
             }
         }
-
+        $fields['options'] = json_encode($fields['options']);
         $product->update($fields);
 
         return to_route('products.index')->with('success', 'Product Updated Successfully');
@@ -144,5 +145,75 @@ class ProductController extends Controller
         }
 
         return to_route('products.index')->with('success', 'Products Was Deleted');
+    }
+
+
+    // Api Functions
+
+    public function apiIndex()
+    {
+        $products = ProductResource::collection(Product::orderByDesc('id')->get());
+        return response()->json(['products' => $products]); // Sample response for testing
+    }
+    public function apiShow(Product $product)
+    {
+        return response()->json(['product' => new ProductResource($product)]); // Sample response for testing
+    }
+
+
+    public function filterProducts(Request $request)
+    {
+        $query = Product::query();
+    
+        // Receive filter parameters
+        $price = $request->input('price');
+        $size = $request->input('size');
+        $rating = $request->input('rating');
+        $color = $request->input('color');
+        $stock = $request->input('stock');
+        $newArrival = $request->input('newArrival');
+    
+        // Apply filters based on the received parameters
+    
+        if ($price) {
+            // Apply price filtering logic (modify this based on how the price data is stored)
+            if ($price === 'HTL') {
+                $query->orderBy('price', 'desc');  // High to Low
+            } elseif ($price === 'LTH') {
+                $query->orderBy('price', 'asc');  // Low to High
+            }
+        }
+    
+        if ($size) {
+            $query->whereJsonContains('options->sizes', $size);  // Assuming 'sizes' is a JSON column
+        }
+    
+        if ($rating) {
+            $query->where('rate', '>=', $rating);  // Filter based on rating
+        }
+    
+        if ($color) {
+            $query->whereJsonContains('options->colors', $color);  // Assuming 'colors' is a JSON column
+        }
+    
+        if ($stock) {
+            if ($stock === 'in') {
+                $query->where('stock', '>', 0);  // In stock
+            } else {
+                $query->where('stock', 0);  // Out of stock
+            }
+        }
+    
+        if ($newArrival) {
+            // Apply logic for new arrivals, for example checking a "created_at" field or a specific tag
+            if ($newArrival === 'bigsale') {
+                $query->where('created_at', '>=', now()->subDays(30));  // Products added in the last 30 days
+            }
+        }
+    
+        // Get filtered products
+        $products = $query->get();
+    
+        return response()->json(compact('products',));
     }
 }

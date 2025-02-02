@@ -1,11 +1,9 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import Main from "@/Pages/Main";
 import { Head, router, useForm } from "@inertiajs/react";
-import { useRef } from "react";
 
-function AddCategory({ auth }) {
-    const { data, setData, post, errors } = useForm({
+function AddCategory() {
+    const {  setData, post, errors } = useForm({
         title: "",
     });
 
@@ -15,7 +13,7 @@ function AddCategory({ auth }) {
     };
 
     return (
-        <Main header="Add Category" auth={auth}>
+        <>
             <Head title="Add Category" />
             <div className="dashboard-form">
                 <form onSubmit={handleForm} className="input-style">
@@ -43,8 +41,10 @@ function AddCategory({ auth }) {
                     </div>
                 </form>
             </div>
-        </Main>
+        </>
     );
 }
+
+AddCategory.header = "Add Category";
 
 export default AddCategory;

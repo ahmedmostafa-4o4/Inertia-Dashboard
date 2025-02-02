@@ -1,4 +1,3 @@
-import Main from "@/Pages/Main";
 import {
     faBell,
     faRightFromBracket,
@@ -14,7 +13,7 @@ export default function Show({ auth, admin, status }) {
 
     return (
         <div className="profile">
-            <Main header={"Profile"} auth={auth}>
+            <>
                 <Head title="Profile" />
                 <div className="title">
                     <h1>{data.name}'s Profile</h1>
@@ -123,8 +122,9 @@ export default function Show({ auth, admin, status }) {
                         </div>
                     </div>
                 </div>
-            </Main>
+            </>
             {status.success ? <Notify message={status.success} /> : null}
         </div>
     );
 }
+Show.header = "Profile";

@@ -1,4 +1,3 @@
-import Main from "@/Pages/Main";
 import { Head, router } from "@inertiajs/react";
 import Table from "../Table";
 import React from "react";
@@ -28,7 +27,7 @@ export default function List({ products, auth, status }) {
     );
 
     return (
-        <Main header="Products" auth={auth}>
+        <>
             <Head title="Products" />
             <div className="title !justify-end">
                 <div className="actions">
@@ -60,6 +59,7 @@ export default function List({ products, auth, status }) {
                 }}
             />
             {status.success ? <Notify message={status.success} /> : null}
-        </Main>
+        </>
     );
 }
+List.header = "Products";

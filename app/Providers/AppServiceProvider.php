@@ -4,10 +4,13 @@ namespace App\Providers;
 
 use App\Models\Admin;
 use App\Observers\UserObserver;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
 
         Vite::prefetch(concurrency: 3);
 

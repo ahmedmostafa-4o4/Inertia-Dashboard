@@ -1,12 +1,11 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
-import Main from "@/Pages/Main";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { router, useForm } from "@inertiajs/react";
 import { useRef } from "react";
 
-function AddAdmin({ auth, admin }) {
+function EditAdmin({ auth, admin }) {
     const { data, setData, post, errors } = useForm({
         name: admin.name || "",
         image_path: "",
@@ -25,7 +24,7 @@ function AddAdmin({ auth, admin }) {
     };
 
     return (
-        <Main header="Admins" auth={auth}>
+        <>
             <div className="dashboard-form">
                 <h1>Edit Admin | {data.name}</h1>
                 <form onSubmit={handleForm} className="input-style">
@@ -135,8 +134,9 @@ function AddAdmin({ auth, admin }) {
                     </div>
                 </form>
             </div>
-        </Main>
+        </>
     );
 }
+EditAdmin.header = "Admins";
 
-export default AddAdmin;
+export default EditAdmin;

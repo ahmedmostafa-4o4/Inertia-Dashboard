@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-function TinyTable({ data, title, link }) {
+function TinyTable({title, link }) {
     return (
         <div className="tiny-table">
             <div className="head">
